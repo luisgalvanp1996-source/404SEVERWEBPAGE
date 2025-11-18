@@ -1,0 +1,183 @@
+<!-- templates/finanzas/index.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Finanzas - Inicio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <!-- 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+-->
+<header>
+  <h1>Módulo de Finanzas</h1>
+  <nav>
+    <ul class="menu">
+      <li><a class="lista tooltip" href="/" data-tooltip="Inicio">🏠 Inicio</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <h2>Balance semanal (viernes → jueves)</h2>
+  <p>Semana: {{ semana_inicio }} — {{ semana_fin }}</p>
+
+  <div class="Movimientos-Finanzas-Resumen-Container">
+    <div class="Movimientos-Finanzas-Resumen">
+      <div class="Resumen-Item">
+        <h3>Ingresos de la semana</h3>
+        <p>${{ "{:,.2f}".format(ingresos_sem) }}</p>
+      </div>
+      <div class="Resumen-Item">
+        <h3>Gastos de la semana</h3>
+        <p>${{ "{:,.2f}".format(egresos_sem) }}</p>
+      </div>
+      <div class="Resumen-Item">
+        <h3>Balance semanal</h3>
+        <p>${{ "{:,.2f}".format(balance_sem) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <button id="toggle-btn-Detalle-Finanzas">Mostrar detalle de movimientos</button>
+
+  <h3>Detalle de los movimientos</h3>
+  <section class="Movimientos-Finanzas-Detalle" id="movimientos-detalle" style="display:none;">
+    <div class="scroll-container-finanzas-tabla">
+      <table>
+        <thead>
+          <tr>
+            <th>Movimiento</th>
+            <th>Concepto</th>
+            <th>Proveedor</th>
+            <th>Fecha</th>
+            <th>Importe</th>
+            <th>Saldo acumulado</th>
+            <th>Adjuntos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in movimientos %}
+          <tr data-id="{{ m.id }}">
+            <td>{{ 'INGRESO' if m.factor >= 0 else 'EGRESO' }}</td>
+            <td>{{ m.concepto }}</td>
+            <td>{{ m.proveedor }}</td>
+            <td>{{ m.fecha }}</td>
+            <td>{{ "{:,.2f}".format(m.importe_signed) }}</td>
+            <td>{{ "{:,.2f}".format(m.saldo_acumulado) }}</td>
+            <td><button class="btn-ver-adjuntos" data-id="{{ m.id }}">Mostrar adjuntos</button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <button id="toggle-btn-Registro-Finanzas">Realizar Registros</button>
+
+  <section id="registro-seccion" style="display:none;">
+    <h3>Registrar Movimiento</h3>
+    <form id="form-registro" action="{{ url_for('finanzas.registrar_movimiento') }}" method="post" enctype="multipart/form-data">
+      <label>Tipo movimiento:
+        <select name="tipo_movimiento">
+          <option value="1">Ingreso</option>
+          <option value="-1">Egreso</option>
+        </select>
+      </label><br>
+
+      <label>Concepto:
+        <select name="concepto_id" required>
+          <option value="">--Selecciona--</option>
+          {% for c in conceptos %}
+            <option value="{{ c.id }}">{{ c.concepto }}</option>
+          {% endfor %}
+        </select>
+      </label><br>
+
+      <label>Proveedor:
+        <select name="proveedor_id">
+          <option value="">--Ninguno--</option>
+          {% for p in proveedores %}
+            <option value="{{ p.id }}">{{ p.nombre }}</option>
+          {% endfor %}
+        </select>
+      </label><br>
+
+      <label>Fecha:
+        <input type="date" name="fecha" required />
+      </label><br>
+
+      <label>Importe:
+        <input type="number" step="0.01" name="importe" required />
+      </label><br>
+
+      <label>Adjuntos (opcional):
+        <input type="file" name="archivos" id="archivos" multiple />
+      </label><br>
+
+      <button type="submit">Registrar</button>
+    </form>
+
+    <hr>
+<h3>Registrar Proveedor</h3>
+<form action="{{ url_for('finanzas.registrar_proveedor') }}" method="post">
+  <label>Nombre del proveedor:
+    <input type="text" name="nombre" required>
+  </label>
+  <br>
+  <button type="submit">Agregar Proveedor</button>
+</form>
+
+<hr>
+<h3>Registrar Concepto</h3>
+<form action="{{ url_for('finanzas.registrar_concepto') }}" method="post">
+  
+  <label>Concepto:
+    <input type="text" name="concepto" required>
+  </label>
+  <br>
+
+  <label>Factor:
+    <select name="factor" required>
+      <option value="1">Ingreso (+)</option>
+      <option value="-1">Egreso (-)</option>
+    </select>
+  </label>
+  <br>
+
+  <button type="submit">Agregar Concepto</button>
+</form>
+
+  </section>
+
+</main>
+
+<!-- Modal genérico para adjuntos (reutilizable) -->
+<div id="modalAdjuntos" class="modal">
+  <div class="modal-content">
+    <span id="cerrarModal" class="cerrar">&times;</span>
+    <h2>Archivos Adjuntos</h2>
+    <div id="galeria-archivos"></div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/finanzas.js') }}"></script>
+  <footer>
+   En todo tiempo ama el amigo, y es como un hermano en tiempo de angustia (Proverbios 17:17).
+  </footer>
+</body>
+</html>

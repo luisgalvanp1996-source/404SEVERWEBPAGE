@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Módulo Médico</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Módulo Médico</h1>
+    <nav>
+      <ul class="menu">
+        <li><a class="lista tooltip" href="/" data-tooltip="Inicio">🏠 Inicio</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Bienvenido al Módulo Médico</h2>
+    <p>Gestiona citas, médicos, clínicas, medicamentos y archivos adjuntos.</p>
+
+    <!-- ---------- ULTIMAS 3 CITAS ---------- -->
+    <section>
+      <h3>Últimas 3 citas</h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:10px 0;">
+        {% for c in ultimas %}
+          <article style="width:300px;background:#fff;border:1px solid #ddd;padding:12px;border-radius:8px;">
+            <div><strong>Fecha:</strong> {{ c.fecha }}</div>
+            <div><strong>Médico:</strong>
+              {% set med = (medicos | selectattr('id','equalto', c.medico_id) | list) %}
+              {{ med[0].nombre if med else c.medico_id }}
+            </div>
+            <div><strong>Clínica:</strong>
+              {% set cli = (clinicas | selectattr('id','equalto', c.unidad_medica_id) | list) %}
+              {{ cli[0].unidad_medica if cli else c.unidad_medica_id }}
+            </div>
+
+            <div style="margin-top:8px; display:flex; gap:6px;">
+              <button class="btn-detalle" data-id="{{ c.id }}">Ver detalle</button>
+              <button class="btn-adjuntos" data-id="{{ c.id }}">Adjuntos</button>
+            </div>
+          </article>
+        {% else %}
+          <p>No hay citas recientes.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ---------- DETALLE (tabla) ---------- -->
+    <button id="toggle-detalle-todas">Mostrar/Ocultar todas las consultas</button>
+
+    <section id="seccion-detalle-consultas" style="display:none;">
+      <h3>Detalle de consultas</h3>
+      <div class="scroll-container-finanzas-tabla" style="max-width:900px;margin:0 auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Médico</th>
+              <th>Clínica</th>
+              <th>Evento</th>
+              <th>Importancia</th>
+              <th>Observaciones</th>
+              <th>Detalle</th>
+              <th>Adjuntos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in consultas %}
+            <tr>
+              <td>{{ c.fecha }}</td>
+
+              <td>
+                {% set med = (medicos | selectattr('id','equalto', c.medico_id) | list) %}
+                {{ med[0].nombre if med else c.medico_id }}
+              </td>
+
+              <td>
+                {% set cli = (clinicas | selectattr('id','equalto', c.unidad_medica_id) | list) %}
+                {{ cli[0].unidad_medica if cli else c.unidad_medica_id }}
+              </td>
+
+              <td>
+                {% set ev = (eventos | selectattr('id','equalto', c.evento_id) | list) %}
+                {{ ev[0].evento if ev else c.evento_id }}
+              </td>
+
+              <td>
+                {% set im = (importancias | selectattr('id','equalto', c.importancia_id) | list) %}
+                {{ im[0].importancia if im else c.importancia_id }}
+              </td>
+
+              <td style="max-width:300px;white-space:normal;">{{ c.observaciones }}</td>
+
+              <td>
+                <button class="btn-detalle" data-id="{{ c.id }}">Detalle</button>
+              </td>
+
+              <td>
+                <button class="btn-adjuntos" data-id="{{ c.id }}">Adjuntos</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- FORMULARIO DE REGISTRO ---------- -->
+    <button id="toggle-registro">Mostrar/Ocultar Registro</button>
+
+    <section id="seccion-registro" style="display:none; margin-top:10px;">
+      <h3>Registrar consulta</h3>
+
+      <form action="{{ url_for('medico.registrar_consulta') }}" method="post" enctype="multipart/form-data">
+        <label>Fecha: <input type="date" name="fecha" required></label><br>
+
+        <label>Médico:
+          <select name="medico_id" required>
+            <option value="">-- selecciona --</option>
+            {% for m in medicos %}
+              <option value="{{ m.id }}">{{ m.nombre }}</option>
+            {% endfor %}
+          </select>
+        </label><br>
+
+        <label>Clínica:
+          <select name="unidad_medica_id" required>
+            <option value="">-- selecciona --</option>
+            {% for c in clinicas %}
+              <option value="{{ c.id }}">{{ c.unidad_medica }}</option>
+            {% endfor %}
+          </select>
+        </label><br>
+
+        <label>Evento:
+          <select name="evento_id">
+            <option value="">-- opcional --</option>
+            {% for e in eventos %}
+              <option value="{{ e.id }}">{{ e.evento }}</option>
+            {% endfor %}
+          </select>
+        </label><br>
+
+        <label>Importancia:
+          <select name="importancia_id">
+            <option value="">-- opcional --</option>
+            {% for i in importancias %}
+              <option value="{{ i.id }}">{{ i.importancia }}</option>
+            {% endfor %}
+          </select>
+        </label><br>
+
+        <label>Medicamentos (Ctrl+click para múltiples):
+          <select name="medicamentos[]" multiple size="4">
+            {% for mm in medicamentos %}
+              <option value="{{ mm.id }}">{{ mm.medicamento }}</option>
+            {% endfor %}
+          </select>
+        </label><br>
+
+        <label>Observaciones:<br>
+          <textarea name="observaciones"></textarea>
+        </label><br>
+
+        <label>Archivos: <input type="file" name="archivos" multiple></label><br><br>
+
+        <button type="submit">Registrar consulta</button>
+      </form>
+
+      <hr>
+
+      <h4>Registrar médico</h4>
+      <form action="{{ url_for('medico.registrar_medico') }}" method="post">
+        <input name="nombre" placeholder="Nombre médico" required>
+        <button type="submit">Registrar médico</button>
+      </form>
+
+      <h4>Registrar clínica</h4>
+      <form action="{{ url_for('medico.registrar_clinica') }}" method="post">
+        <input name="nombre" placeholder="Nombre clínica" required>
+        <button type="submit">Registrar clínica</button>
+      </form>
+
+      <h4>Registrar medicamento</h4>
+      <form action="{{ url_for('medico.registrar_medicamento') }}" method="post">
+        <input name="nombre" placeholder="Nombre medicamento" required>
+        <button type="submit">Registrar medicamento</button>
+      </form>
+
+    </section>
+
+  </main>
+
+  <!-- Modal Adjuntos -->
+  <div id="modalAdjuntos" class="modal">
+    <div class="modal-content">
+      <span id="cerrarModal" class="cerrar">&times;</span>
+      <h3>Archivos adjuntos</h3>
+      <div id="galeria-archivos"></div>
+    </div>
+  </div>
+
+  <!-- Modal Medicamentos -->
+  <div id="modalMedicamentos" class="modal">
+    <div class="modal-content">
+      <span id="cerrarMedicamentos" class="cerrar">&times;</span>
+      <h3>Medicamentos Recetados</h3>
+      <ul id="listaMedicamentos"></ul>
+    </div>
+  </div>
+
+  <!-- Modal Detalle -->
+  <div id="modalDetalle" class="modal">
+    <div class="modal-content">
+      <span id="cerrarDetalle" class="cerrar">&times;</span>
+
+      <h3>Detalle de la Consulta</h3>
+
+      <p><strong>Fecha:</strong> <span id="detalle-fecha"></span></p>
+      <p><strong>Evento:</strong> <span id="detalle-evento"></span></p>
+      <p><strong>Importancia:</strong> <span id="detalle-importancia"></span></p>
+      <p><strong>Clínica:</strong> <span id="detalle-clinica"></span></p>
+      <p><strong>Médico:</strong> <span id="detalle-medico"></span></p>
+
+      <p><strong>Observaciones:</strong></p>
+      <p id="detalle-obs" style="white-space:pre-line;background:#f4f4f4;padding:10px;border-radius:8px;"></p>
+
+      <div style="margin-top:20px;display:flex;gap:12px;">
+          <button id="btn-ver-medicamentos">Medicamentos</button>
+          <button id="btnAdjuntosDetalle">Adjuntos</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/medico.js') }}"></script>
+</body>
+</html>

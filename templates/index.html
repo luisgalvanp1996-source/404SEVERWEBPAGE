@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casa - Inicio</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<header>
+  <h1>Bienvenidos</h1>
+  <h3>Modulos</h3>
+  <nav>
+    <ul class="menu">
+      <li>
+        <a class="lista tooltip" href="/biblia" data-tooltip="Reflexiones basadas en la Biblia">🙏 Fe / Reflexiones</a>
+      </li>
+      <li>
+        <a class="lista tooltip" href="/medico" data-tooltip="Registros y notas médicas personales">🏥 Médico</a>
+      </li>
+      <li>
+        <a class="lista tooltip" href="/finanzas" data-tooltip="Control y seguimiento de tus finanzas">💰 Finanzas</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <h2>Inicio</h2>
+  <p>Selecciona una de las secciones del menú superior.</p>
+
+  <h3>Estado del servidor</h3>
+
+  <div class="discos-container">
+
+    {% for d in discos %}
+      {% set clase =
+        "verde" if d.percent < 60 else
+        "amarillo" if d.percent < 85 else
+        "rojo"
+      %}
+      
+      <div class="disco-card">
+        <h4 class="disco-titulo">{{ d.label }}</h4>
+        <small class="disco-mount">{{ d.path }}</small>
+
+        <div class="disco-info">
+          <p><strong>Total:</strong> {{ (d.total / (1024**3)) | round(2) }} GB</p>
+          <p><strong>Usado:</strong> {{ (d.used / (1024**3)) | round(2) }} GB</p>
+          <p><strong>Libre:</strong> {{ (d.free / (1024**3)) | round(2) }} GB</p>
+        </div>
+
+        <div class="barra-uso">
+          <div class="barra-progreso {{ clase }}" style="width: {{ d.percent }}%;"></div>
+        </div>
+
+        <p class="porcentaje-uso"><strong>{{ d.percent }}% usado</strong></p>
+      </div>
+    {% endfor %}
+
+  </div>
+</main>
+
+
+
+<footer>
+  Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree,
+  no se pierda, mas tenga vida eterna (Juan 3:16).
+</footer>
+
+</body>
+</html>

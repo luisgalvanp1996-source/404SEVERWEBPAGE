@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Casa - Aprendizajes Bíblicos</title>
+
+  <!-- tu CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<header>
+  <h1>Módulo de Aprendizajes Bíblicos</h1>
+  <nav>
+    <ul class="menu">
+      <li><a class="lista tooltip" href="/" data-tooltip="Inicio de la página principal">🏠 Inicio</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <h2>Bienvenido al Módulo Relacionado a la Fe</h2>
+  <p>En esta sección podrás registrar tus aprendizajes bíblicos</p>
+
+  <!-- Botones principales -->
+  <div style="text-align:center; margin-top: 18px;">
+    <button id="toggle-btn-reg" class="toggle-btn registrar">Mostrar Registro de Aprendizajes</button>
+    <button id="toggle-btn-dat" class="toggle-btn">Mostrar Sección de Aprendizajes</button>
+  </div>
+
+  <!-- FORM: Registro (oculto al inicio) -->
+  <section id="registro-contenedor" class="Registro-Aprendizaje" style="display:none;">
+    <form action="/biblia/registrar" method="post" id="form-aprendizaje" enctype="multipart/form-data">
+      <label for="libro">Libro:</label>
+      <select name="libro" id="libro" required>
+        <option value="" disabled selected>-- Selecciona el libro --</option>
+        {% for libro in libros %}
+          <option value="{{ libro.nombre }}">{{ libro.nombre }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="capitulo">Capítulo:</label>
+      <select name="capitulo" id="capitulo" required>
+        <option value="" disabled selected>-- Selecciona un capítulo --</option>
+      </select>
+
+      <label for="versiculoinicio">Versículo Inicio:</label>
+      <select name="versiculoinicio" id="versiculoinicio" required>
+        <option value="" disabled selected>-- Selecciona inicio --</option>
+      </select>
+
+      <label for="versiculofin">Versículo Fin:</label>
+      <select name="versiculofin" id="versiculofin" required>
+        <option value="" disabled selected>-- Selecciona fin --</option>
+      </select>
+
+      <label for="texto">Texto del Aprendizaje:</label>
+      <textarea id="texto" name="texto" required></textarea>
+
+      <label for="archivos">Archivos (opcional):</label>
+      <input type="file" id="archivos" name="archivos" multiple>
+
+      <button type="submit" id="toggle-btn-reg-submit">Registrar Aprendizaje</button>
+    </form>
+  </section>
+
+  <!-- SECCIÓN DE DETALLE (oculta al inicio) -->
+  <section id="detalle-contenedor" class="Detalle-Aprendizaje" style="display:none;">
+    <div class="Desplegable-Aprendizaje">
+      <select id="opciones" name="opciones">
+        <option value="" disabled selected>-- Selecciona un aprendizaje --</option>
+      </select>
+      <!-- botón para cargar adjuntos del aprendizaje seleccionado -->
+      <button id="btnAdjuntos" style="margin-left: 12px;">Mostrar Adjuntos</button>
+    </div>
+
+    <div class="Detalle-Aprendizaje-Texto">
+      <pre id="texto-detalle" style="white-space: pre-wrap;">Selecciona de la lista de arriba algo para leer</pre>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  La gracia de nuestro Señor Jesucristo sea con todos vosotros (Revelación 22:21).
+</footer>
+
+<!-- =============== MODAL UNIFICADO (lightbox + media + pdf) =============== -->
+<div id="lightboxModal" class="modal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true">
+    <button id="closeLightbox" class="cerrar" title="Cerrar">×</button>
+
+    <!-- controls prev/next -->
+    <button id="prevSlide" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); z-index:101;">◀</button>
+    <button id="nextSlide" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); z-index:101;">▶</button>
+
+    <div id="lightbox-body" style="min-height:320px;">
+      <!-- aquí JS inyecta: <img>, <video>, <audio> o <iframe> -->
+    </div>
+
+    <div id="lightbox-meta" style="margin-top:12px; text-align:center; font-size:14px; color:#333;">
+      <span id="meta-text"></span>
+      <div style="margin-top:6px;"><a id="open-original" href="#" target="_blank">Abrir en pestaña nueva</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- cargamos el JS externo -->
+<script src="{{ url_for('static', filename='js/biblia.js') }}"></script>
+</body>
+</html>

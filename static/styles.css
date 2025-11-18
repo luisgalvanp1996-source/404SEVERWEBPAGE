@@ -1,0 +1,441 @@
+/* Fondo gris claro general */
+body {
+  margin: 0;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: #f7f7f7;
+  color: #222;
+}
+
+/* Franja azul del menú */
+header {
+  background-color: oklch(32.385% 0.07886 153.845);
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+}
+
+/* Lista del menú (horizontal) */
+.menu {
+  list-style: none;
+  margin: 10px 0 0 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+/* Enlaces del menú */
+.menu a {
+  color: white;
+  text-decoration: underline;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+/* Efecto al pasar el mouse */
+.menu a:hover {
+  color: #ffcc00;
+}
+
+/* Contenido principal */
+main {
+  padding: 30px;
+  text-align: center;
+  color: oklch(32.385% 0.07886 153.845)
+}
+
+/* Pie de página */
+footer {
+  background-color: oklch(32.385% 0.07886 153.845);
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+}
+
+
+/* TOOLTIP personalizado */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+/* Caja oculta */
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%; /* encima del enlace */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+/* Triangulito */
+.tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Mostrar al pasar el mouse */
+.tooltip:hover::after,
+.tooltip:hover::before {
+  opacity: 1;
+}
+
+/*estilo de los enlaces del menú con iconos*/
+.menu a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+  text-decoration: underline;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: color 0.3s;
+  font-size: 16px;
+}
+
+h3 {
+  color: oklch(32.385% 0.07886 153.845);
+  text-align: center;
+  margin-left: -0px;
+
+  
+}
+
+.Detalle-Aprendizaje-Texto,.texto-detalle {
+  width: 80%;
+  max-width: 700px;
+  margin: 10px auto;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border: 5px solid oklch(32.385% 0.07886 153.845);
+  border-radius: 10px;
+  height: 200px;          /* altura fija */
+  overflow-y: scroll;     /* habilita el scroll vertical */
+  overflow-x: hidden;     /* evita desplazamiento horizontal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.993);
+  text-align: justify;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 16px;
+}
+
+
+select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 2px solid oklch(32.385% 0.07886 153.845);
+  border-style: solid;
+  font-size: 16px;
+  align-items: center;
+}
+label {
+  font-weight: bold;
+  margin-right: 10px;
+  align-items: center;
+}
+
+/* Centrado */
+.Desplegable-Aprendizaje {
+  display: flex;
+  justify-content: center;   /* Centra horizontalmente */
+  align-items: center;       /* Centra verticalmente (si quieres, opcional) */
+  margin-top: 20px;          /* Separación del top */
+}
+
+#toggle-btn-dat,.toggle-btn,#toggle-btn-reg-submit,#toggle-btn-Detalle-Finanzas,#toggle-btn-Registro-Finanzas,#popup-registro-mov,#popup-registro-prov,#popup-registro-conc {
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: oklch(32.385% 0.07886 153.845);
+  color: white;
+  font-weight: bold;
+  display: block;      /* necesario */
+  margin-left: auto;   /* necesario */
+  margin-right: auto;  /* necesario */
+}
+
+.Desplegable-Aprendizaje select {
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.Detalle-Aprendizaje {
+  display: none;   /* Arranca oculto */
+}
+
+.Registro-Aprendizaje {
+  display: none;   /* Arranca oculto */
+  justify-content: center;   /* Centra horizontalmente */
+  align-items: center;       /* Centra verticalmente (si quieres, opcional) */
+  margin-top: 20px; 
+}
+#registro-contenedor {
+  width: 80%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border: 5px solid oklch(32.385% 0.07886 153.845);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.993);
+  text-align: left;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.Registro-Aprendizaje-Texto {
+  justify-content: center;   /* Centra horizontalmente */
+  align-items: center;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+}
+textarea {
+  width: 80%;
+  height: 100px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid oklch(32.385% 0.07886 153.845);
+  font-size: 16px;
+  resize: vertical;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  
+}
+.hidden { display: none; }
+
+
+/* Fondo oscuro */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+/* Caja del modal */
+.modal-content {
+  background-color: white;
+  margin: 8% auto;
+  padding: 20px;
+  width: 70%;
+  border-radius: 10px;
+}
+
+/* Botón cerrar */
+.cerrar {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* galería */
+#galeria-archivos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.galeria-item {
+  text-align: center;
+  padding: 10px;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.galeria-item img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.galeria-item a {
+  text-decoration: none;
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.modal .galeria-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+    margin: 10px;
+    padding: 10px;
+    background: #f4f4f4;
+    border-radius: 10px;
+}
+
+.modal .icono-tipo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
+}
+
+#galeria-archivos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+
+/* estilos nuevos para  finanzas */
+.scroll-container-finanzas-tabla {
+    width: max-content; /* Set a fixed width for the container */
+    height: auto; /* Set a fixed height for the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 5px solid #ccc;
+    margin-left: -10px ; /* Center the container */
+    
+}
+
+table {
+    width: 100%; /* Make the table fill the container width */
+    border-collapse: collapse;
+    align-items: center;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap; 
+    align-items: center;
+}
+
+th {
+    background-color: #f2f2f2;
+    align-items: center;
+}
+
+.Movimientos-Finanzas-Detalle {
+    width: 80%;
+    max-width: 700px;
+    margin: 10px auto;
+    padding: 15px;
+
+    
+    border-radius: auto;
+         /* altura fija */
+
+
+    text-align: justify;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 16px;
+}
+.Movimientos-Finanzas-Resumen-Container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+/* Prioridad de modales */
+#modalDetalle {
+    z-index: 1000;
+}
+
+#modalAdjuntos {
+    z-index: 1100;
+}
+
+#modalMedicamentos {
+    z-index: 1200;
+}
+
+/* Fondo oscuro siempre por debajo */
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+/* ======================== */
+/*  DASHBOARD DE DISCOS     */
+/* ======================== */
+
+.discos-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.disco-card {
+  width: 260px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  text-align: left;
+}
+
+.disco-titulo {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.disco-mount {
+  color: #666;
+}
+
+.disco-info p {
+  margin: 3px 0;
+  font-size: 14px;
+}
+
+.barra-uso {
+  width: 100%;
+  height: 16px;
+  background: #ddd;
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.barra-progreso {
+  height: 100%;
+  border-radius: 10px;
+}
+
+/* Colores según porcentaje */
+.barra-progreso.verde {
+  background: #2a9d8f;
+}
+
+.barra-progreso.amarillo {
+  background: #f4a261;
+}
+
+.barra-progreso.rojo {
+  background: #e63946;
+}
+
+.porcentaje-uso {
+  margin-top: 5px;
+  font-size: 14px;
+}

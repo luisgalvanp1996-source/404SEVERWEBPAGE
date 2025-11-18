@@ -1,0 +1,19 @@
+[33mc66c7d0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to HEAD~12
+[33mcfcfe8f[m HEAD@{1}: commit: Ignore DATA folder
+[33m3bcb9fa[m HEAD@{2}: commit: Update .gitignore to reflect changes in DATA folder handling
+[33mfb89bcb[m HEAD@{3}: commit: Remove DATA from repo
+[33m01da396[m HEAD@{4}: pull --tags origin main: Merge made by the 'ort' strategy.
+[33m90ce88c[m HEAD@{5}: commit: Remove DATA from repo
+[33m1e308f9[m HEAD@{6}: rebase (abort): returning to refs/heads/main
+[33m1e308f9[m HEAD@{7}: rebase (abort): returning to refs/heads/main
+[33m1e308f9[m HEAD@{8}: commit: Fix case sensitivity in .gitignore for DATA folder
+[33mad615d4[m HEAD@{9}: commit: Stop tracking DATA folder
+[33mc97b5ac[m HEAD@{10}: commit: Implementar gestión de discos y mejorar módulo médico con nuevas funcionalidades y estilos
+[33m368b822[m HEAD@{11}: commit: l
+[33m86349d2[m HEAD@{12}: commit: modulo de finanzas lanzado
+[33mb75ba87[m HEAD@{13}: commit: ff
+[33m90d6ebd[m HEAD@{14}: commit: se agrego modal carrusel de fotos videos imagenes y demas, ademas de separar js de html
+[33mc66c7d0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{15}: commit: CAMBIOS MENORES
+[33m044d844[m HEAD@{16}: commit: cambios en subida de archivos y visualizacion
+[33mfa65b86[m HEAD@{17}: commit: cambio en clase de boton
+[33m132a596[m HEAD@{18}: commit (initial): commint inicial
