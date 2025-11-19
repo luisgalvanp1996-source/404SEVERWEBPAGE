@@ -8,17 +8,17 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-  <!-- 
+   
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div class="flash-container">
       {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
+        <div class="alert {{ category }}">{{ message }}</div>
       {% endfor %}
     </div>
   {% endif %}
 {% endwith %}
--->
+
 <header>
   <h1>Módulo de Finanzas</h1>
   <nav>

@@ -97,3 +97,18 @@ document.addEventListener("DOMContentLoaded", () => {
   cerrar.addEventListener("click", () => modal.style.display = "none");
   window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  setTimeout(() => {
+    const container = document.querySelector(".flash-container");
+
+    if (container) {
+      container.style.transition = "opacity 0.5s";
+      container.style.opacity = "0";
+
+      setTimeout(() => container.remove(), 500);
+    }
+  }, 3000);
+
+});

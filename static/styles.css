@@ -439,3 +439,30 @@ th {
   margin-top: 5px;
   font-size: 14px;
 }
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  border-radius: 8px;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  border: 2px solid oklch(32.385% 0.07886 153.845);
+
+}
+.success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+.info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
