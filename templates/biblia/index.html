@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Casa - Aprendizajes Bíblicos</title>
+  <title>Aprendizajes Bíblicos</title>
 
   <!-- tu CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
 
@@ -89,7 +90,7 @@
 <!-- =============== MODAL UNIFICADO (lightbox + media + pdf) =============== -->
 <div id="lightboxModal" class="modal" aria-hidden="true">
   <div class="modal-content" role="dialog" aria-modal="true">
-    <button id="closeLightbox" class="cerrar" title="Cerrar">×</button>
+    <button id="closeLightbox" class="cerrar" title="Cerrar">x</button>
 
     <!-- controls prev/next -->
     <button id="prevSlide" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); z-index:101;">◀</button>
