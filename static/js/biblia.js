@@ -268,4 +268,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+});// ----------------------------------------------
+//  BOTÓN PARA VER VERSÍCULOS
+// ----------------------------------------------
+document.getElementById("btnVerVersiculo").addEventListener("click", function () {
+    const id = document.getElementById("opciones").value;
+
+    if (!id) {
+        alert("Selecciona un aprendizaje primero.");
+        return;
+    }
+
+    fetch(`/biblia/obtener_versiculos/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                alert("No se encontraron versículos.");
+                return;
+            }
+
+            // Título como "Hechos 12:1-25"
+            document.getElementById("tituloVersiculo").textContent = data.cabecera;
+
+            // Texto completo ya formateado desde el servidor
+            document.getElementById("textoVersiculo").textContent = data.texto;
+
+            // Mostrar modal
+            document.getElementById("modalVersiculo").style.display = "block";
+        })
+        .catch(() => alert("Error consultando los versículos."));
+});
+
+// Cerrar modal
+document.getElementById("cerrarVersiculo").addEventListener("click", function () {
+    document.getElementById("modalVersiculo").style.display = "none";
 });

@@ -470,3 +470,21 @@ th {
   background-color: #d1ecf1;
   border-color: #bee5eb;
 }
+.versiculos-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+  text-align: justify;
+}
+
+/* Modal versículo — permitir scroll interno */
+#modalVersiculo .modal-content {
+    max-height: 80vh;        /* que no cubra toda la pantalla */
+    overflow-y: auto;        /* scroll vertical */
+    padding-right: 10px;     /* evita que el scroll tape el texto */
+}
+#textoVersiculo {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}

@@ -74,6 +74,7 @@
       </select>
       <!-- botón para cargar adjuntos del aprendizaje seleccionado -->
       <button id="btnAdjuntos" style="margin-left: 12px;">Mostrar Adjuntos</button>
+      <button id="btnVerVersiculo" style="margin-left: 12px;">Ver versículo</button>
     </div>
 
     <div class="Detalle-Aprendizaje-Texto">
@@ -106,6 +107,17 @@
     </div>
   </div>
 </div>
+
+<!-- Modal para versículos -->
+<!-- MODAL VERSÍCULO -->
+<div id="modalVersiculo" class="modal">
+  <div class="modal-content">
+    <span id="cerrarVersiculo" class="cerrar">&times;</span>
+    <h2 id="tituloVersiculo"></h2>
+    <pre id="textoVersiculo" style="white-space: pre-wrap; text-align: justify;"></pre>
+  </div>
+</div>
+
 
 <!-- cargamos el JS externo -->
 <script src="{{ url_for('static', filename='js/biblia.js') }}"></script>

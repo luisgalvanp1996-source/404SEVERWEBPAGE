@@ -1,0 +1,123 @@
+ 
+============================================================ 
+[24/11/2025  2:35:51.52] Inicio del script 
+[24/11/2025  2:35:51.52] Verificando servicio SQL Server... 
+[24/11/2025  2:35:51.55] SQL Server ya estaba en ejecución. 
+[24/11/2025  2:35:51.56] Iniciando aplicación... 
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.85:5001
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 801-705-524
+192.168.1.215 - - [24/Nov/2025 02:36:03] "GET / HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:03] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:36:05] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:05] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:36:05] "GET /static/js/biblia.js HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:36:05] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:10] "GET /biblia/api/archivos?id=11 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:15] "GET /biblia/api/archivos?id=12 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:15] "GET /Data/biblia/imagen/98d65da7-5282-4e7a-8b2b-dc5d729647cc.jpg HTTP/1.1" 404 -
+192.168.1.215 - - [24/Nov/2025 02:36:32] "GET /biblia/api/archivos?id=21 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:37] "GET /biblia/api/archivos?id=20 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:36:37] "GET /Data/biblia/video/4a77793f-96fd-45c4-b01d-b6b26bae8a34.mov HTTP/1.1" 206 -
+192.168.1.215 - - [24/Nov/2025 02:36:37] "GET /static/favicon.ico HTTP/1.1" 304 -
+[24/11/2025  2:37:31.18] La aplicación terminó su ejecución. 
+ 
+============================================================ 
+[24/11/2025  2:37:37.31] Inicio del script 
+[24/11/2025  2:37:37.33] Verificando servicio SQL Server... 
+[24/11/2025  2:37:37.36] SQL Server ya estaba en ejecución. 
+[24/11/2025  2:37:37.37] Iniciando aplicación... 
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.85:5001
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 801-705-524
+192.168.1.215 - - [24/Nov/2025 02:37:41] "GET / HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:37:42] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:37:42] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:37:43] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:37:43] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:37:43] "GET /static/js/biblia.js HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:37:43] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:39:41] "GET / HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:39:41] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:39:43] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:39:43] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:39:43] "GET /static/js/biblia.js HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 02:39:43] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 02:39:54] "GET /biblia/api/archivos?id=23 HTTP/1.1" 200 -
+ * Detected change in 'C:\\Python\\404SEVERWEBPAGE\\modules\\biblia\\routes.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 801-705-524
+192.168.1.215 - - [24/Nov/2025 03:05:03] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:05:03] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:05:03] "GET /static/js/biblia.js HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:05:03] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:05:03] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:05:12] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:06:11] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+ * Detected change in 'C:\\Python\\404SEVERWEBPAGE\\modules\\biblia\\routes.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 801-705-524
+192.168.1.215 - - [24/Nov/2025 03:10:32] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:10:32] "GET /static/styles.css HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:10:32] "GET /static/js/biblia.js HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:10:32] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:10:32] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:10:37] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:10:44] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:11:38] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:21] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:21] "GET /static/styles.css HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:21] "GET /static/js/biblia.js HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:21] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:16:21] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:24] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:24] "GET /static/styles.css HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:24] "GET /static/js/biblia.js HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:24] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:24] "GET /static/favicon.ico HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:30] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:31] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:31] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:31] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:31] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:32] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:32] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:32] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:32] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:32] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:16:38] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:17:33] "GET /biblia/obtener_versiculos/22 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:20:47] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:20:47] "GET /static/styles.css HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:20:47] "GET /static/js/biblia.js HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:20:47] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:20:47] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:20:55] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:22:09] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:22:09] "GET /static/styles.css HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:22:09] "GET /static/js/biblia.js HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:22:09] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:22:09] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:22:14] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:23:08] "GET /biblia/ HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:23:08] "GET /static/styles.css HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:23:08] "GET /static/js/biblia.js HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:23:08] "GET /static/favicon.ico HTTP/1.1" 304 -
+192.168.1.215 - - [24/Nov/2025 03:23:08] "GET /biblia/api/aprendizajes HTTP/1.1" 200 -
+192.168.1.215 - - [24/Nov/2025 03:23:13] "GET /biblia/obtener_versiculos/23 HTTP/1.1" 200 -

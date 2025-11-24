@@ -299,3 +299,45 @@ def api_archivos():
 
     return jsonify(respuesta)
 
+@bp.route('/obtener_versiculos/<int:id_aprendizaje>')
+def obtener_versiculos(id_aprendizaje):
+    session = SessionLocal()
+
+    # 1) Buscar el aprendizaje
+    apr = session.query(DatAprendizajeBiblia).filter_by(id=id_aprendizaje).first()
+    if not apr:
+        session.close()
+        return {"error": "No encontrado"}, 404
+
+    libro_id = apr.libro_id
+    cap = apr.capitulo
+    ini = apr.versiculo_inicio
+    fin = apr.versiculo_fin
+
+    # 2) Obtener nombre del libro
+    libro = session.query(CatLibrosBiblia).filter_by(id=libro_id).first()
+
+    # 3) Buscar versículos del rango
+    versos = session.query(Biblia).filter(
+        Biblia.libronumero == libro_id,
+        Biblia.capitulo == cap,
+        Biblia.versiculo.between(ini, fin)
+    ).order_by(Biblia.versiculo.asc()).all()
+
+    session.close()
+
+    # 4) Armar textual limpio
+    lineas = []
+    for v in versos:
+        lineas.append(v.texto.strip())
+
+    texto_unido = "\n\n".join(lineas)
+
+    cabecera = f"{libro.nombre} {cap}:{ini}-{fin}"
+
+    return {
+        "cabecera": cabecera,
+        "texto": texto_unido
+    }
+
+
