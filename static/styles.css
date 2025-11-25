@@ -160,7 +160,23 @@ label {
   margin-top: 20px;          /* Separación del top */
 }
 
-#toggle-btn-dat,.toggle-btn,#toggle-btn-reg-submit,#toggle-btn-Detalle-Finanzas,#toggle-btn-Registro-Finanzas,#popup-registro-mov,#popup-registro-prov,#popup-registro-conc {
+@media (max-width: 600px) {
+  .Desplegable-Aprendizaje {
+    flex-direction: column;  
+    gap: 10px;               
+  }
+  
+}
+
+
+#toggle-btn-dat,
+.toggle-btn,
+#toggle-btn-reg-submit,
+#toggle-btn-Detalle-Finanzas,
+#toggle-btn-Registro-Finanzas,
+#popup-registro-mov,
+#popup-registro-prov,
+#popup-registro-conc {
   padding: 8px 16px;
   margin-bottom: 10px;
   border-radius: 8px;
@@ -328,6 +344,12 @@ th {
     align-items: center;
 }
 
+@media (max-width: 600px) {
+    .scroll-container-finanzas-tabla {
+        width: 100%; /* Ajusta el ancho al 100% en pantallas pequeñas */
+    }
+  
+}
 .Movimientos-Finanzas-Detalle {
     width: 80%;
     max-width: 700px;

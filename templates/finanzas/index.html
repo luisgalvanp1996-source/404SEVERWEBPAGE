@@ -78,7 +78,7 @@
             <td>{{ m.fecha }}</td>
             <td>{{ "{:,.2f}".format(m.importe_signed) }}</td>
             <td>{{ "{:,.2f}".format(m.saldo_acumulado) }}</td>
-            <td><button class="btn-ver-adjuntos" data-id="{{ m.id }}">Mostrar adjuntos</button></td>
+            <td><button id="btn-ver-adjuntos" class="btn-ver-adjuntos" data-id="{{ m.id }}">Mostrar adjuntos</button></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -127,10 +127,10 @@
       </label><br>
 
       <label>Adjuntos (opcional):
-        <input type="file" name="archivos" id="archivos" multiple />
+        <input id="Adjuntar-Finanzas" type="file" name="archivos" id="archivos" multiple />
       </label><br>
 
-      <button type="submit">Registrar</button>
+      <button id="Agregar-Movimiento-Finanzas" type="submit">Registrar</button>
     </form>
 
     <hr>
@@ -140,7 +140,7 @@
     <input type="text" name="nombre" required>
   </label>
   <br>
-  <button type="submit">Agregar Proveedor</button>
+  <button id="Agregar-Proveedor" type="submit">Agregar Proveedor</button>
 </form>
 
 <hr>
@@ -160,7 +160,7 @@
   </label>
   <br>
 
-  <button type="submit">Agregar Concepto</button>
+  <button id="Agregar-Concepto" type="submit">Agregar Concepto</button>
 </form>
 
   </section>

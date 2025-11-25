@@ -38,8 +38,8 @@
             </div>
 
             <div style="margin-top:8px; display:flex; gap:6px;">
-              <button class="btn-detalle" data-id="{{ c.id }}">Ver detalle</button>
-              <button class="btn-adjuntos" data-id="{{ c.id }}">Adjuntos</button>
+              <button id="btn-detalle" class="btn-detalle" data-id="{{ c.id }}">Ver detalle</button>
+              <button id="btn-adjuntos" class="btn-adjuntos" data-id="{{ c.id }}">Adjuntos</button>
             </div>
           </article>
         {% else %}
@@ -165,9 +165,9 @@
           <textarea name="observaciones"></textarea>
         </label><br>
 
-        <label>Archivos: <input type="file" name="archivos" multiple></label><br><br>
+        <label>Archivos: <input itemid="Reg-Archivos-Medico" type="file" name="archivos" multiple></label><br><br>
 
-        <button type="submit">Registrar consulta</button>
+        <button id="Registrar-Consulta" type="submit">Registrar consulta</button>
       </form>
 
       <hr>
@@ -175,7 +175,7 @@
       <h4>Registrar médico</h4>
       <form action="{{ url_for('medico.registrar_medico') }}" method="post">
         <input name="nombre" placeholder="Nombre médico" required>
-        <button type="submit">Registrar médico</button>
+        <button id="Registrar-Medico" type="submit">Registrar médico</button>
       </form>
 
       <h4>Registrar clínica</h4>
@@ -187,7 +187,7 @@
       <h4>Registrar medicamento</h4>
       <form action="{{ url_for('medico.registrar_medicamento') }}" method="post">
         <input name="nombre" placeholder="Nombre medicamento" required>
-        <button type="submit">Registrar medicamento</button>
+        <button id="Registrar-Medicamento" type="submit">Registrar medicamento</button>
       </form>
 
     </section>
