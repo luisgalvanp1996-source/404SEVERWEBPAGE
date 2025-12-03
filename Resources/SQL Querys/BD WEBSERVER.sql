@@ -1,5 +1,17 @@
-﻿USE [404webpagedb];
+﻿IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '404webpagedb')
+BEGIN
+    PRINT 'Creando base de datos 404webpagedb...';
+    CREATE DATABASE [404webpagedb];
+END
+ELSE
+BEGIN
+    PRINT 'La base de datos ya existe.';
+END
 GO
+
+USE [404webpagedb];
+GO
+
 ------------------------------------------------------------
 -- TABLAS
 ------------------------------------------------------------
