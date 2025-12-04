@@ -202,6 +202,26 @@ CREATE TABLE DAT_DESGLOSE_FINANZAS (
 
 );
 GO
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BIBLIA')
+CREATE TABLE BIBLIA (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    LibroNum INT,
+    Capitulo INT,
+    Versiculo INT,
+    Texto NVARCHAR(MAX)
+);
+
+/*
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'OTRA_TABLA')
+CREATE TABLE OTRA_TABLA (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    COLUMNA1 NVARCHAR(100),
+    COLUMNA2 INT
+);
+
+*/
 ------------------------------------------------------------
 -- RELACIONES (FOREIGN KEYS)
 ------------------------------------------------------------
