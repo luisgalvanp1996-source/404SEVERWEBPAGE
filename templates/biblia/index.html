@@ -28,6 +28,7 @@
   <div style="text-align:center; margin-top: 18px;">
     <button id="toggle-btn-reg" class="toggle-btn registrar">Mostrar Registro de Aprendizajes</button>
     <button id="toggle-btn-dat" class="toggle-btn">Mostrar Sección de Aprendizajes</button>
+    <button id="toggle-btn-res" class="toggle-btn">Mostrar Seccion de Descargas</button>
   </div>
 
   <!-- FORM: Registro (oculto al inicio) -->
@@ -81,6 +82,20 @@
       <pre id="texto-detalle" style="white-space: pre-wrap;">Selecciona de la lista de arriba algo para leer</pre>
     </div>
   </section>
+  <!-- SECCIÓN DE DESCARGAS (oculta al inicio) -->
+   <section class="resources-section">
+  <h3>📦 Recursos descargables</h3>
+
+  <div class="resources-bar">
+    <span id="ruta-actual">Resources</span>
+    <button id="btnActualizar">🔄 Actualizar</button>
+  </div>
+
+  <ul id="lista-resources" class="resources-list">
+    <!-- JS llena aquí -->
+  </ul>
+</section>
+
 
 </main>
 

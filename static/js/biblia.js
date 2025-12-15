@@ -303,3 +303,65 @@ document.getElementById("btnVerVersiculo").addEventListener("click", function ()
 document.getElementById("cerrarVersiculo").addEventListener("click", function () {
     document.getElementById("modalVersiculo").style.display = "none";
 });
+
+
+let rutaActual = "";
+
+function cargarResources(path = "") {
+    rutaActual = path;
+
+    fetch(`/biblia/api/resources?path=${encodeURIComponent(path)}`)
+        .then(res => res.json())
+        .then(data => {
+            const lista = document.getElementById("lista-resources");
+            const ruta = document.getElementById("ruta-actual");
+
+            lista.innerHTML = "";
+            ruta.textContent = "resources" + (path ? " / " + path : "");
+
+            // ⬅️ volver
+            if (path) {
+                const padre = path.split("/").slice(0, -1).join("/");
+                const liBack = document.createElement("li");
+                liBack.textContent = "⬅️ ..";
+                liBack.onclick = () => cargarResources(padre);
+                lista.appendChild(liBack);
+            }
+
+            data.items.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = item.name;
+
+                if (item.type === "folder") {
+                    li.classList.add("resource-folder");
+                    li.onclick = () => cargarResources(item.path);
+                } else {
+                    li.classList.add("resource-file");
+
+                    const ext = item.name.split(".").pop().toLowerCase();
+                    li.classList.add(`file-${ext}`);
+                    li.onclick = () => {
+                        window.location.href = `/biblia/descargar/${item.path}`;
+                    };
+                }
+
+                lista.appendChild(li);
+            });
+        });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("btnActualizar");
+    if (btn) btn.addEventListener("click", () => cargarResources(rutaActual));
+
+    cargarResources();
+});
+
+
+document.getElementById("btnActualizar").addEventListener("click", () => {
+    cargarResources(rutaActual);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarResources();
+});

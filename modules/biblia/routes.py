@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, redirect, flash,current_app,url_for
+from flask import Blueprint, render_template, request, jsonify, redirect, flash,current_app,url_for,send_from_directory
 from database.connection import SessionLocal
 from database.models_biblia import CatLibrosBiblia, DatAprendizajeBiblia, Biblia, DatArchivosBiblia
 import os
@@ -9,6 +9,8 @@ from sqlalchemy import select
 bp = Blueprint('biblia', __name__, url_prefix="/biblia")
 
 UPLOAD_ROOT = os.path.join(os.getcwd(), "Data", "biblia")
+RESOURCES_ROOT = os.path.join(os.getcwd(), "resources")
+
 
 # Extensiones permitidas y mapeo a carpeta + ID de CAT_ARCHIVO_TIPO
 EXT_MAP = {
@@ -339,5 +341,48 @@ def obtener_versiculos(id_aprendizaje):
         "cabecera": cabecera,
         "texto": texto_unido
     }
+
+
+@bp.route("/api/resources")
+def api_resources():
+    rel_path = request.args.get("path", "")
+    
+    base = os.path.abspath(RESOURCES_ROOT)
+    target = os.path.abspath(os.path.join(base, rel_path))
+
+    # 🔐 Seguridad: no salir de /resources
+    if not target.startswith(base):
+        return {"error": "Acceso no permitido"}, 403
+
+    if not os.path.exists(target):
+        return {"items": []}
+
+    items = []
+    for name in os.listdir(target):
+        full = os.path.join(target, name)
+        items.append({
+            "name": name,
+            "type": "folder" if os.path.isdir(full) else "file",
+            "path": os.path.join(rel_path, name).replace("\\", "/")
+        })
+
+    # Carpetas primero
+    items.sort(key=lambda x: (x["type"] != "folder", x["name"].lower()))
+
+    return {"items": items}
+
+
+@bp.route("/descargar/<path:archivo>")
+def descargar_archivo(archivo):
+    base = os.path.abspath(RESOURCES_ROOT)
+    full = os.path.abspath(os.path.join(base, archivo))
+
+    if not full.startswith(base):
+        return "Acceso denegado", 403
+
+    carpeta = os.path.dirname(full)
+    nombre = os.path.basename(full)
+
+    return send_from_directory(carpeta, nombre, as_attachment=True)
 
 
