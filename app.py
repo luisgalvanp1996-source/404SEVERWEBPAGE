@@ -12,6 +12,7 @@ from database.models import DeviceClientInfo
 from modules.biblia.routes import bp as biblia_bp
 from modules.medico.routes import bp as medico_bp
 from modules.finanzas.routes import bp as finanzas_bp
+from modules.personal.routes import bp as personal_bp
 
 
 def get_drives_info():
@@ -63,6 +64,7 @@ def create_app():
     app.register_blueprint(biblia_bp)
     app.register_blueprint(medico_bp)
     app.register_blueprint(finanzas_bp)
+    app.register_blueprint(personal_bp)
 
     # -----------------------------------------------------------
     # 📌 ENDPOINT PARA GUARDAR INFORMACIÓN DEL DISPOSITIVO
