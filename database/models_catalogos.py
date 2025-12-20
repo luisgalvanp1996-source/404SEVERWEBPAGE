@@ -23,5 +23,5 @@ class CatTipos(Base):
 
     id = Column("ID", Integer, primary_key=True, autoincrement=True)
     tipo = Column("TIPO", NVARCHAR(100), nullable=True)
-    categoria = Column("CATEGORIA", Integer, ForeignKey("CAT_CAT.ID"), nullable=True )  # FK a CAT_CAT si existe
+    categoria = Column("CATEGORIA", Integer, ForeignKey("CAT_CAT.ID"), nullable=True )  
 

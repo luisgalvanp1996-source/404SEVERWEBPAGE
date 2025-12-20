@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, flash,current_app,url_for,send_from_directory
 from database.connection import SessionLocal
-from database.models_biblia import CatLibrosBiblia, DatAprendizajeBiblia, Biblia, DatArchivosBiblia
+from database.models_biblia import CatLibrosBiblia, DatAprendizajeBiblia, Biblia, DatArchivosBiblia,DatTagsBiblia,CatTagsBiblia,CatTagsTipoBiblia
 import os
 import uuid
 from werkzeug.utils import secure_filename

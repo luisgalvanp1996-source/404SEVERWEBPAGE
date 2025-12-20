@@ -69,3 +69,24 @@ class Biblia(Base):
 
     # Relación hacia el catálogo
   
+class CatTagsTipoBiblia(Base):
+    __tablename__ = "CAT_TAGS_TIPO_BIBLIA"
+
+    id = Column("ID", Integer, primary_key=True, autoincrement=True)
+    tipo_tag = Column("TIPO_TAG", Integer)
+
+class CatTagsBiblia(Base):
+    __tablename__ = "CAT_TAGS_BIBLIA"
+
+    id = Column("ID", Integer, primary_key=True, autoincrement=True)
+    tipo_tag_id = Column("TIPO_TAG_ID",Integer,ForeignKey("CAT_TAGS_TIPO_BIBLIA.ID"))
+    tag = Column("TAG", NVARCHAR)
+
+class DatTagsBiblia(Base):
+    __tablename__ = "DAT_TAGS_BIBLIA"
+
+    id = Column("ID", Integer, primary_key=True, autoincrement=True)
+    libro_id = Column("LIBRO_ID",Integer,ForeignKey("CAT_LIBROS_BIBLIA.ID"))
+    versiculo = Column("VERSICULO", Integer)
+    tag_tipo_id = Column("TAG_TIPO_ID",Integer,ForeignKey("CAT_TAGS_TIPO_BIBLIA.ID"))
+    tag_id = Column("TAG_ID",Integer,ForeignKey("CAT_TAGS_BIBLIA.ID"))
