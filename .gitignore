@@ -1,3 +1,5 @@
 DATA/
 Resources/
+*.pyc
+__pycache__/
 cloudflared.exe
