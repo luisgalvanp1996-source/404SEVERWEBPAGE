@@ -4,3 +4,4 @@ Resources/
 __pycache__/
 cloudflared.exe
 .env
+credentials.env
