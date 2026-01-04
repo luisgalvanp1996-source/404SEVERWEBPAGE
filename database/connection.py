@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 
+
 # Cargar variables desde .env
 load_dotenv()
 
@@ -39,3 +40,5 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+
