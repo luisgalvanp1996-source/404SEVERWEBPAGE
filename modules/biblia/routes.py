@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, flash,current_app,url_for,send_from_directory
 from database.connection import SessionLocal
+from modules.common import EXT_MAP
 from database.models_biblia import CatLibrosBiblia, DatAprendizajeBiblia, Biblia, DatArchivosBiblia,DatTagsBiblia,CatTagsBiblia,CatTagsTipoBiblia
 import os
 import uuid
@@ -12,29 +13,6 @@ UPLOAD_ROOT = os.path.join(os.getcwd(), "Data", "biblia")
 RESOURCES_ROOT = os.path.join(os.getcwd(), "resources")
 
 
-# Extensiones permitidas y mapeo a carpeta + ID de CAT_ARCHIVO_TIPO
-EXT_MAP = {
-    # imágenes
-    ".jpg":  {"folder": "imagen",   "tipo_id": 1},
-    ".jpeg": {"folder": "imagen",   "tipo_id": 1},
-    ".png":  {"folder": "imagen",   "tipo_id": 1},
-    ".gif":  {"folder": "imagen",   "tipo_id": 1},
-
-    # documentos
-    ".pdf":  {"folder": "documento","tipo_id": 2},
-    ".docx": {"folder": "documento","tipo_id": 2},
-    ".doc":  {"folder": "documento","tipo_id": 2},
-    ".txt":  {"folder": "documento","tipo_id": 2},
-
-    # video
-    ".mp4":  {"folder": "video",    "tipo_id": 3},
-    ".mov":  {"folder": "video",    "tipo_id": 3},
-    ".mkv":  {"folder": "video",    "tipo_id": 3},
-
-    # audio
-    ".mp3":  {"folder": "audio",    "tipo_id": 4},
-    ".wav":  {"folder": "audio",    "tipo_id": 4},
-}
 
 def ensure_folder(path):
     if not os.path.exists(path):

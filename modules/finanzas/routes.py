@@ -1,6 +1,7 @@
 # modules/finanzas/routes.py
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from database.connection import SessionLocal
+from modules.common import EXT_MAP
 from database.models_finanzas import DatMovimientosFinanzas, CatConceptosFinanzas, CatProveedoresFinanzas, DatArchivosFinanzas
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
@@ -11,25 +12,6 @@ bp = Blueprint('finanzas', __name__, url_prefix="/finanzas")
 
 # Rutas de almacenamiento
 UPLOAD_ROOT = os.path.join(os.getcwd(), "Data", "Finanzas")
-EXT_MAP = {
-    # imágenes
-    ".jpg":  {"folder": "imagen",   "tipo_id": 1},
-    ".jpeg": {"folder": "imagen",   "tipo_id": 1},
-    ".png":  {"folder": "imagen",   "tipo_id": 1},
-    ".gif":  {"folder": "imagen",   "tipo_id": 1},
-    # documentos
-    ".pdf":  {"folder": "documento","tipo_id": 2},
-    ".docx": {"folder": "documento","tipo_id": 2},
-    ".doc":  {"folder": "documento","tipo_id": 2},
-    ".txt":  {"folder": "documento","tipo_id": 2},
-    # videos
-    ".mp4":  {"folder": "video",    "tipo_id": 3},
-    ".mov":  {"folder": "video",    "tipo_id": 3},
-    ".mkv":  {"folder": "video",    "tipo_id": 3},
-    # audios
-    ".mp3":  {"folder": "audio",    "tipo_id": 4},
-    ".wav":  {"folder": "audio",    "tipo_id": 4},
-}
 
 def ensure_folder(path):
     os.makedirs(path, exist_ok=True)
