@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, flash,current_app,url_for,send_from_directory
 from database.connection import SessionLocal
+from modules.common import EXT_MAP
+from database.models_personal import DatArchivosPersonal,DatEventosPersonal,DatDetallesArchivosPersonal,DatDetallesEventosPersonal 
 import os
 import uuid
 from werkzeug.utils import secure_filename
@@ -10,3 +12,5 @@ bp = Blueprint("personal", __name__, url_prefix="/personal")
 @bp.route("/")
 def index():
     return render_template("personal/index.html")
+
+

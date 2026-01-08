@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, jsonify, current_app
 from database.connection import SessionLocal
+from modules.common import EXT_MAP
 from database.models_medico import (
     CatMedicamentosMedico,
     DatConsultasMedico,
@@ -18,28 +19,6 @@ bp = Blueprint('medico', __name__, url_prefix="/medico")
 # Carpeta base para subir archivos (Data/MEDICO/...)
 UPLOAD_ROOT = os.path.join(os.getcwd(), "Data", "MEDICO")
 
-EXT_MAP = {
-    # imágenes
-    ".jpg":  {"folder": "IMAGEN",   "tipo_id": 1},
-    ".jpeg": {"folder": "IMAGEN",   "tipo_id": 1},
-    ".png":  {"folder": "IMAGEN",   "tipo_id": 1},
-    ".gif":  {"folder": "IMAGEN",   "tipo_id": 1},
-
-    # documentos
-    ".pdf":  {"folder": "DOCUMENTO","tipo_id": 2},
-    ".docx": {"folder": "DOCUMENTO","tipo_id": 2},
-    ".doc":  {"folder": "DOCUMENTO","tipo_id": 2},
-    ".txt":  {"folder": "DOCUMENTO","tipo_id": 2},
-
-    # video
-    ".mp4":  {"folder": "VIDEO",    "tipo_id": 3},
-    ".mov":  {"folder": "VIDEO",    "tipo_id": 3},
-    ".mkv":  {"folder": "VIDEO",    "tipo_id": 3},
-
-    # audio
-    ".mp3":  {"folder": "AUDIO",    "tipo_id": 4},
-    ".wav":  {"folder": "AUDIO",    "tipo_id": 4},
-}
 
 def ensure_folder(path):
     if not os.path.exists(path):
