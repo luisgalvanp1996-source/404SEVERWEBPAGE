@@ -1,0 +1,73 @@
+/* Estilos para el módulo personal que no son globales*/
+
+  /* Estilo para banda de viajes */
+  .banda {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #f9f9f9;
+}
+
+/* Header */
+.banda-header {
+  width: 100%;
+  padding: 15px 20px;
+  background-color: oklch(32.385% 0.07886 153.845);
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banda-header:hover {
+  background-color: oklch(32.385% 0.07886 153.845);
+}
+
+/* Icono */
+.banda-header .icon {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Contenido */
+.banda-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 20px;
+  background-color: #fff;
+}
+
+/* Contenido activo */
+.banda.active .banda-content {
+  max-height: max-content; /* Ajusta si tu contenido es grande */
+  padding: 20px;
+}
+
+/* Rotación del icono */
+
+
+
+  /* Estilos para slideshow */
+
+  /*Botones*/
+    .Button1 {
+        background-color: oklch(32.385% 0.07886 153.845);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 12px;
+    }
