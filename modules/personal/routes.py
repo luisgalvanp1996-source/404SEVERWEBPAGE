@@ -9,6 +9,8 @@ from sqlalchemy import select
 
 bp = Blueprint("personal", __name__, url_prefix="/personal")
 
+UPLOAD_ROOT = os.path.join(os.getcwd(), "Data", "PERSONAL")
+
 @bp.route("/")
 def index():
     return render_template("personal/index.html")

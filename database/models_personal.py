@@ -1,11 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, NVARCHAR,Date,Time
-from sqlalchemy.orm import relationship
 from .connection import Base
-
-
-
-
-
 
 class DatEventosPersonal(Base):
     __tablename__ = "DAT_EVENTOS_PERSONAL"
