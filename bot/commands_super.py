@@ -1,8 +1,8 @@
 #commands_super.py
 
-from storage import get_lista
-from helpers import subtotal
-from config import EMOJI_ADD, EMOJI_TRASH, EMOJI_MONEY
+from bot.storage import get_lista
+from bot.helpers import subtotal
+from bot.config import EMOJI_ADD, EMOJI_TRASH, EMOJI_MONEY
 
 async def nuevo(update, context):
     user_id = update.effective_user.id
