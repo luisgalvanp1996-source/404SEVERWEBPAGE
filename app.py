@@ -1,14 +1,14 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
+from sqlalchemy import text
 import os
 import psutil
 import win32api
 from datetime import datetime
 
-# Importa tu modelo y la sesión correcta
+# Importa tu sesión
 from database.connection import SessionLocal
-from database.models import DeviceClientInfo
 
-# Importa tus módulos
+# Importa tus módulos existentes
 from modules.biblia.routes import bp as biblia_bp
 from modules.medico.routes import bp as medico_bp
 from modules.finanzas.routes import bp as finanzas_bp
@@ -16,9 +16,7 @@ from modules.personal.routes import bp as personal_bp
 
 
 def get_drives_info():
-    """Obtiene información de los discos: letra, nombre, total, usado y libre."""
     drives_info = []
-
     partitions = psutil.disk_partitions(all=False)
 
     for p in partitions:
@@ -31,9 +29,7 @@ def get_drives_info():
             continue
 
         try:
-            volume_name = win32api.GetVolumeInformation(p.mountpoint)[0]
-            if not volume_name:
-                volume_name = "Sin nombre"
+            volume_name = win32api.GetVolumeInformation(p.mountpoint)[0] or "Sin nombre"
         except Exception:
             volume_name = "Desconocido"
 
@@ -60,58 +56,182 @@ def create_app():
 
     app.secret_key = "F1c9fE71A2b4D8e3_99D4-a7C6Ff2B1eE3c8_44D9E1aaFF7283cCbD91E0fA2bC6d"
 
-    # Blueprints
+    # Blueprints existentes
     app.register_blueprint(biblia_bp)
     app.register_blueprint(medico_bp)
     app.register_blueprint(finanzas_bp)
     app.register_blueprint(personal_bp)
 
-    # -----------------------------------------------------------
-    # 📌 ENDPOINT PARA GUARDAR INFORMACIÓN DEL DISPOSITIVO
-    # -----------------------------------------------------------
-    @app.post("/api/deviceinfo")
-    def save_device_info():
+    # =========================================================
+    # 🤖 BOT TELEGRAM – API PEDIDOS (CORREGIDO)
+    # =========================================================
+
+    @app.post("/api/bot/usuario")
+    def bot_registrar_usuario():
         data = request.json
         db = SessionLocal()
 
         try:
-            record = DeviceClientInfo(
-                user_agent=data.get("userAgent"),
-                platform=data.get("platform"),
-                language=data.get("language"),
-                timezone=data.get("timezone"),
-                screen_width=data.get("screenWidth"),
-                screen_height=data.get("screenHeight"),
-                available_width=data.get("availableWidth"),
-                available_height=data.get("availableHeight"),
-                color_depth=data.get("colorDepth"),
-                pixel_ratio=data.get("pixelRatio"),
-                touch_points=data.get("maxTouchPoints"),
-                orientation=data.get("orientation"),
-                vendor=data.get("vendor"),
-                hardware_concurrency=data.get("hardwareConcurrency"),
-                memory_gb=data.get("memoryGB"),
-                connection_effective_type=data.get("connectionEffectiveType"),
-                connection_rtt=data.get("connectionRTT"),
-                connection_downlink=data.get("connectionDownlink"),
-                created_at=datetime.now()
+            db.execute(
+                text("""
+                    IF NOT EXISTS (
+                        SELECT 1 FROM BT_USUARIOS_TG WHERE ID_USUARIO_TG = :id
+                    )
+                    INSERT INTO BT_USUARIOS_TG
+                    (ID_USUARIO_TG, USERNAME, NOMBRE, APELLIDO)
+                    VALUES (:id, :username, :nombre, :apellido)
+                """),
+                {
+                    "id": data.get("id_usuario_tg"),
+                    "username": data.get("username"),
+                    "nombre": data.get("nombre"),
+                    "apellido": data.get("apellido")
+                }
             )
 
-            db.add(record)
             db.commit()
-            db.refresh(record)
-
-            return jsonify({"msg": "OK", "id": record.id})
+            return jsonify({"ok": True})
 
         except Exception as e:
-            print("🔥 ERROR en /api/deviceinfo:", e)  # 👈 AQUI SE AGREGA
             db.rollback()
+            print("🔥 BOT usuario:", e)
             return jsonify({"error": str(e)}), 500
 
         finally:
             db.close()
 
-    # -----------------------------------------------------------
+
+    @app.post("/api/bot/pedido")
+    def bot_crear_pedido():
+        data = request.json
+        db = SessionLocal()
+
+        try:
+            result = db.execute(
+                text("""
+                    INSERT INTO BT_PEDIDOS (ID_USUARIO_TG)
+                    OUTPUT INSERTED.ID_PEDIDO
+                    VALUES (:id_usuario)
+                """),
+                {
+                    "id_usuario": data.get("id_usuario_tg")
+                }
+            )
+
+            pedido_id = result.scalar()
+            db.commit()
+
+            return jsonify({"id_pedido": pedido_id})
+
+        except Exception as e:
+            db.rollback()
+            print("🔥 BOT pedido:", e)
+            return jsonify({"error": str(e)}), 500
+
+        finally:
+            db.close()
+
+
+    @app.post("/api/bot/pedido/item")
+    def bot_agregar_item():
+        data = request.json
+        db = SessionLocal()
+
+        try:
+            db.execute(
+                text("""
+                    INSERT INTO BT_PEDIDOS_DETALLE
+                    (ID_PEDIDO, ID_PRODUCTO, ID_VARIANTE, CANTIDAD)
+                    SELECT
+                        :id_pedido,
+                        p.ID_PRODUCTO,
+                        v.ID_VARIANTE,
+                        :cantidad
+                    FROM BT_PRODUCTOS p
+                    JOIN BT_PRODUCTOS_VARIANTES v ON v.ID_PRODUCTO = p.ID_PRODUCTO
+                    WHERE p.NOMBRE = :producto AND v.NOMBRE = :variante
+                """),
+                {
+                    "id_pedido": data.get("id_pedido"),
+                    "producto": data.get("producto"),
+                    "variante": data.get("variante"),
+                    "cantidad": data.get("cantidad", 1)
+                }
+            )
+
+            db.commit()
+            return jsonify({"ok": True})
+
+        except Exception as e:
+            db.rollback()
+            print("🔥 BOT item:", e)
+            return jsonify({"error": str(e)}), 500
+
+        finally:
+            db.close()
+
+
+    @app.get("/api/bot/pedido/<int:id_pedido>")
+    def bot_ver_pedido(id_pedido):
+        db = SessionLocal()
+
+        try:
+            result = db.execute(
+                text("""
+                    SELECT
+                        p.NOMBRE AS producto,
+                        v.NOMBRE AS variante,
+                        d.CANTIDAD
+                    FROM BT_PEDIDOS_DETALLE d
+                    JOIN BT_PRODUCTOS p ON p.ID_PRODUCTO = d.ID_PRODUCTO
+                    JOIN BT_PRODUCTOS_VARIANTES v ON v.ID_VARIANTE = d.ID_VARIANTE
+                    WHERE d.ID_PEDIDO = :id
+                """),
+                {"id": id_pedido}
+            )
+
+            items = [dict(r._mapping) for r in result]
+
+            return jsonify({
+                "id_pedido": id_pedido,
+                "items": items
+            })
+
+        except Exception as e:
+            print("🔥 BOT ver pedido:", e)
+            return jsonify({"error": str(e)}), 500
+
+        finally:
+            db.close()
+
+
+    @app.post("/api/bot/pedido/cerrar")
+    def bot_cerrar_pedido():
+        data = request.json
+        db = SessionLocal()
+
+        try:
+            db.execute(
+                text("""
+                    UPDATE BT_PEDIDOS
+                    SET ESTATUS = 'cerrado'
+                    WHERE ID_PEDIDO = :id
+                """),
+                {"id": data.get("id_pedido")}
+            )
+
+            db.commit()
+            return jsonify({"ok": True})
+
+        except Exception as e:
+            db.rollback()
+            print("🔥 BOT cerrar:", e)
+            return jsonify({"error": str(e)}), 500
+
+        finally:
+            db.close()
+
+    # =========================================================
 
     @app.route('/')
     def index():

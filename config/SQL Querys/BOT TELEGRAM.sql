@@ -1,0 +1,134 @@
+/* =========================================================
+   TABLAS BOT TELEGRAM – SISTEMA DE PEDIDOS
+   ========================================================= */
+
+------------------------------------------------------------
+-- BT_USUARIOS_TG
+------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT * FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'BT_USUARIOS_TG'
+)
+CREATE TABLE BT_USUARIOS_TG (
+    ID_USUARIO_TG BIGINT NOT NULL,
+    USERNAME NVARCHAR(100) NULL,
+    NOMBRE NVARCHAR(100) NULL,
+    APELLIDO NVARCHAR(100) NULL,
+    FECHA_REGISTRO DATETIME DEFAULT GETDATE(),
+    CONSTRAINT PK_BT_USUARIOS_TG PRIMARY KEY (ID_USUARIO_TG)
+);
+GO
+
+
+------------------------------------------------------------
+-- BT_PRODUCTOS
+------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT * FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'BT_PRODUCTOS'
+)
+CREATE TABLE BT_PRODUCTOS (
+    ID_PRODUCTO INT IDENTITY(1,1) PRIMARY KEY,
+    NOMBRE NVARCHAR(100) NOT NULL,
+    DESCRIPCION NVARCHAR(255) NULL,
+    ACTIVO BIT DEFAULT 1
+);
+GO
+
+
+------------------------------------------------------------
+-- BT_PRODUCTOS_VARIANTES
+------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT * FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'BT_PRODUCTOS_VARIANTES'
+)
+CREATE TABLE BT_PRODUCTOS_VARIANTES (
+    ID_VARIANTE INT IDENTITY(1,1) PRIMARY KEY,
+    ID_PRODUCTO INT NOT NULL,
+    NOMBRE NVARCHAR(100) NOT NULL,
+    ACTIVO BIT DEFAULT 1
+);
+GO
+
+
+------------------------------------------------------------
+-- BT_PEDIDOS
+------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT * FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'BT_PEDIDOS'
+)
+CREATE TABLE BT_PEDIDOS (
+    ID_PEDIDO INT IDENTITY(1,1) PRIMARY KEY,
+    ID_USUARIO_TG BIGINT NOT NULL,
+    FECHA_PEDIDO DATETIME DEFAULT GETDATE(),
+    ESTATUS NVARCHAR(20) DEFAULT 'pendiente'
+);
+GO
+
+
+------------------------------------------------------------
+-- BT_PEDIDOS_DETALLE
+------------------------------------------------------------
+IF NOT EXISTS (
+    SELECT * FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'BT_PEDIDOS_DETALLE'
+)
+CREATE TABLE BT_PEDIDOS_DETALLE (
+    ID_DETALLE INT IDENTITY(1,1) PRIMARY KEY,
+    ID_PEDIDO INT NOT NULL,
+    ID_PRODUCTO INT NOT NULL,
+    ID_VARIANTE INT NOT NULL,
+    CANTIDAD INT DEFAULT 1
+);
+GO
+
+
+/* =========================================================
+   CONSTRAINTS (BT_#)
+   ========================================================= */
+
+-- BT_1 → PEDIDOS → USUARIOS TG
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'BT_1')
+ALTER TABLE BT_PEDIDOS
+ADD CONSTRAINT BT_1
+FOREIGN KEY (ID_USUARIO_TG)
+REFERENCES BT_USUARIOS_TG(ID_USUARIO_TG);
+GO
+
+
+-- BT_2 → VARIANTES → PRODUCTOS
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'BT_2')
+ALTER TABLE BT_PRODUCTOS_VARIANTES
+ADD CONSTRAINT BT_2
+FOREIGN KEY (ID_PRODUCTO)
+REFERENCES BT_PRODUCTOS(ID_PRODUCTO);
+GO
+
+
+-- BT_3 → DETALLE → PEDIDOS
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'BT_3')
+ALTER TABLE BT_PEDIDOS_DETALLE
+ADD CONSTRAINT BT_3
+FOREIGN KEY (ID_PEDIDO)
+REFERENCES BT_PEDIDOS(ID_PEDIDO);
+GO
+
+
+-- BT_4 → DETALLE → PRODUCTOS
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'BT_4')
+ALTER TABLE BT_PEDIDOS_DETALLE
+ADD CONSTRAINT BT_4
+FOREIGN KEY (ID_PRODUCTO)
+REFERENCES BT_PRODUCTOS(ID_PRODUCTO);
+GO
+
+
+-- BT_5 → DETALLE → VARIANTES
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'BT_5')
+ALTER TABLE BT_PEDIDOS_DETALLE
+ADD CONSTRAINT BT_5
+FOREIGN KEY (ID_VARIANTE)
+REFERENCES BT_PRODUCTOS_VARIANTES(ID_VARIANTE);
+GO
