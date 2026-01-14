@@ -1,6 +1,6 @@
 #commands_basic.py
 
-from config import EMOJI_CART
+from bot.config import EMOJI_CART
 
 async def start(update, context):
     await update.message.reply_text(
