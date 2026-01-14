@@ -1,8 +1,8 @@
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
-from config import TOKEN
-from commands_basic import start, help_cmd
-from commands_super import (
+from bot.config import TOKEN
+from bot.commands_basic import start, help_cmd
+from bot.commands_super import (
     nuevo, listar, total_cmd, limpiar, agregar_item
 )
 
