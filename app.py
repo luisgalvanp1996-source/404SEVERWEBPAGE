@@ -4,7 +4,7 @@ import os
 import psutil
 import win32api
 from datetime import datetime
-
+from dotenv import load_dotenv
 # Importa tu sesión
 from database.connection import SessionLocal
 
@@ -54,7 +54,7 @@ def create_app():
     def data_files(filename):
         return send_from_directory(DATA_FOLDER, filename)
 
-    app.secret_key = "F1c9fE71A2b4D8e3_99D4-a7C6Ff2B1eE3c8_44D9E1aaFF7283cCbD91E0fA2bC6d"
+    app.secret_key = load_dotenv("SECRET_KEY")
 
     # Blueprints existentes
     app.register_blueprint(biblia_bp)
