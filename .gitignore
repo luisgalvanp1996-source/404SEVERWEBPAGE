@@ -3,3 +3,5 @@ Resources/
 *.pyc
 __pycache__/
 cloudflared.exe
+/.vscode/
+.env
