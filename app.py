@@ -190,7 +190,7 @@ def create_app():
                 {"id": id_pedido}
             )
 
-            items = [dict(r._mapping) for r in result]
+            items = [{k.lower(): v for k, v in r._mapping.items()} for r in result]
 
             return jsonify({
                 "id_pedido": id_pedido,

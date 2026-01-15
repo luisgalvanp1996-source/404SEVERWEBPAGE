@@ -23,8 +23,8 @@ async def catalogo_callback(update, context):
     if data == "producto_cheesecake":
         keyboard = [
             [
-                InlineKeyboardButton("🍰 Chico", callback_data="cheesecake_chico"),
-                InlineKeyboardButton("🍰 Grande", callback_data="cheesecake_grande")
+                InlineKeyboardButton("🍰 Fresa", callback_data="cheesecake_fresa"),
+                InlineKeyboardButton("🍰 Chocolate", callback_data="cheesecake_chocolate")
             ]
         ]
 
@@ -38,8 +38,8 @@ async def catalogo_callback(update, context):
     # =========================
     # VARIANTES
     # =========================
-    if data in ("cheesecake_chico", "cheesecake_grande"):
-        variante = "Chico" if data.endswith("chico") else "Grande"
+    if data in ("cheesecake_fresa", "cheesecake_chocolate"):
+        variante = "Fresa" if data.endswith("fresa") else "Chocolate"
 
         resp = post("/bot/pedido/item", {
             "id_pedido": pedido_id,
@@ -55,5 +55,8 @@ async def catalogo_callback(update, context):
             return
 
         await query.message.reply_text(
-            f"{EMOJI_OK} Cheesecake ({variante}) agregado al pedido"
+            f"{EMOJI_OK} Cheesecake ({variante}) agregado al pedido\n"
+            f"Usa /catalogo para ver más productos\n"
+            f"Usa /lista para ver tu pedido\n"
+            f"O usa /enviar para enviar el pedido"
         )
