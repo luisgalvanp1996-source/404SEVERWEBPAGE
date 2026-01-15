@@ -7,7 +7,13 @@ from telegram.ext import (
 )
 
 from bot.config import TOKEN
-
+# Comandos Admin
+from bot.commands_admin import (
+    cancelar,
+    completar,
+    pedidos,
+    texto_admin
+    )
 # Comandos cliente
 from bot.commands_client import (
     start,
@@ -28,12 +34,21 @@ def run_bot():
     # =========================
     # COMANDOS
     # =========================
+    # Comandos Cliente
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("nuevo", nuevo))
     app.add_handler(CommandHandler("lista", lista))
     app.add_handler(CommandHandler("enviar", enviar))
     app.add_handler(CommandHandler("catalogo", catalogo))
     app.add_handler(CommandHandler("help", help_cmd))
+
+    # Comandos Admin
+    app.add_handler(CommandHandler("pedidos", pedidos))
+    app.add_handler(CommandHandler("cancelar", cancelar))
+    app.add_handler(CommandHandler("completar", completar))
+    app.add_handler(CommandHandler("texto_admin", texto_admin))
+
+
 
     # =========================
     # CALLBACKS (INLINE BUTTONS)
