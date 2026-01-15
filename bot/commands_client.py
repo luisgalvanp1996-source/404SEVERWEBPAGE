@@ -38,7 +38,8 @@ async def nuevo(update, context):
     context.user_data["pedido_id"] = data["id_pedido"]
 
     await update.message.reply_text(
-        f"{EMOJI_OK} Pedido creado\nID: {data['id_pedido']}"
+        f"{EMOJI_OK} Pedido creado\nID: {data['id_pedido']}\n"
+        f"Usa /catalogo para ver productos"
     )
 
 
@@ -57,7 +58,8 @@ async def lista(update, context):
 
     msg = "📦 *Tu pedido*\n\n"
     for i in data["items"]:
-        msg += f"- {i['producto']} ({i['variante']}) x{i['cantidad']}\n"
+        msg += f"- {i['producto']} ({i['variante']}) x{i['cantidad']}\n" f"Usa /enviar para enviar el pedido\n" f"Usa /catalogo para ver más productos\n\n"
+
 
     await update.message.reply_text(msg, parse_mode="Markdown")
 
@@ -83,10 +85,7 @@ async def enviar(update, context):
 async def catalogo(update, context):
     keyboard = [
         [
-            InlineKeyboardButton(
-                "🍰 Cheesecake",
-                callback_data="producto_cheesecake"
-            )
+            InlineKeyboardButton("🍰 Cheesecake", callback_data="producto_cheesecake")
         ]
     ]
 
