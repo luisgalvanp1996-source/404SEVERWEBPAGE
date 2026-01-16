@@ -14,14 +14,17 @@ from bot.commands_admin import (
     pedidos,
     texto_admin
     )
+# Comandos Básicos
+from bot.commands_basic import (
+    help_cmd
+)
 # Comandos cliente
 from bot.commands_client import (
     start,
     nuevo,
     lista,
     enviar,
-    catalogo,
-    help_cmd
+    catalogo
 )
 
 # Callbacks inline
@@ -40,6 +43,8 @@ def run_bot():
     app.add_handler(CommandHandler("lista", lista))
     app.add_handler(CommandHandler("enviar", enviar))
     app.add_handler(CommandHandler("catalogo", catalogo))
+
+    # Comandos Básicos
     app.add_handler(CommandHandler("help", help_cmd))
 
     # Comandos Admin

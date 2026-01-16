@@ -8,16 +8,10 @@ async def start(update, context):
     )
 
 async def help_cmd(update, context):
-    await update.message.reply_text("""
-🛒 *Lista del súper*
-
-/nuevo   - Nueva lista
-/lista   - Ver artículos
-/total   - Subtotal
-/limpiar - Vaciar lista
-
-➕ Para agregar:
-`articulo precio` 
-Ejemplo:
-pan 35
-""", parse_mode="Markdown")
+    await update.message.reply_text(
+        "/nuevo - Nuevo pedido\n"
+        "/catalogo - Ver productos\n"
+        "/lista - Ver pedido\n"
+        "/enviar - Enviar pedido\n"
+        "/help - Ayuda"
+    )

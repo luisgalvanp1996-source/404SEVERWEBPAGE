@@ -1,4 +1,4 @@
-from bot.api import post
+from bot.api import post, get, refresh
 from bot.state import set_admin_action, get_admin_action, clear_admin_action
 from bot.config import ADMIN_IDS, EMOJI_OK, EMOJI_ERR
 
@@ -6,15 +6,32 @@ def es_admin(update):
     return update.effective_user.id in ADMIN_IDS
 
 
+
 async def pedidos(update, context):
     if not es_admin(update):
         await update.message.reply_text("⛔ No autorizado")
         return
 
-    await update.message.reply_text(
-        "📦 Usa /completar o /cancelar\n"
-        "(IDs se listan en el panel web por ahora)"
-    )
+    try:
+        data = get("/bot/pedidos/pendientes")
+    except Exception:
+        await update.message.reply_text("❌ Error consultando pedidos")
+        return
+
+    if not data:
+        await update.message.reply_text("📭 No hay pedidos pendientes")
+        return
+
+    msg = "📦 *Pedidos pendientes*\n\n"
+
+    for pedido_id, items in data.items():
+        msg += f"*Pedido #{pedido_id}*\n{data[pedido_id][0]['usuario']['nombre']} {data[pedido_id][0]['usuario']['apellido']} (@{data[pedido_id][0]['usuario']['username']})\n"
+        for i in items:
+            msg += f"- {i['producto']} {i['variante']} x{i['cantidad']}\n"
+        msg += "\n"
+
+    await update.message.reply_text(msg, parse_mode="Markdown")
+
 
 
 async def completar(update, context):

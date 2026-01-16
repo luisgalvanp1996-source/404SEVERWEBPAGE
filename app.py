@@ -5,6 +5,7 @@ import psutil
 import win32api
 from datetime import datetime
 from dotenv import load_dotenv
+
 # Importa tu sesión
 from database.connection import SessionLocal
 
@@ -48,13 +49,14 @@ def get_drives_info():
 def create_app():
     app = Flask(__name__)
 
+    load_dotenv()  # ✅ necesario
+    app.secret_key = os.getenv("SECRET_KEY")
+
     DATA_FOLDER = os.path.join(os.getcwd(), "Data")
 
     @app.route('/Data/<path:filename>')
     def data_files(filename):
         return send_from_directory(DATA_FOLDER, filename)
-
-    app.secret_key = load_dotenv("SECRET_KEY")
 
     # Blueprints existentes
     app.register_blueprint(biblia_bp)
@@ -63,8 +65,63 @@ def create_app():
     app.register_blueprint(personal_bp)
 
     # =========================================================
-    # 🤖 BOT TELEGRAM – API PEDIDOS (CORREGIDO)
+    # 🤖 BOT TELEGRAM – API PEDIDOS
     # =========================================================
+
+    @app.get("/api/bot/pedidos/pendientes")
+    def bot_listar_pedidos_pendientes():
+        db = SessionLocal()
+
+        try:
+            result = db.execute(
+                text("""
+                    SELECT
+                        p.ID_PEDIDO,
+                        u.USERNAME,
+                        u.NOMBRE AS nombre_usuario,
+                        u.APELLIDO AS apellido_usuario,
+                        pr.NOMBRE AS producto,
+                        v.NOMBRE AS variante,
+                        d.CANTIDAD
+                    FROM BT_PEDIDOS p
+                    JOIN BT_PEDIDOS_DETALLE d ON d.ID_PEDIDO = p.ID_PEDIDO
+                    JOIN BT_PRODUCTOS pr ON pr.ID_PRODUCTO = d.ID_PRODUCTO
+                    JOIN BT_PRODUCTOS_VARIANTES v ON v.ID_VARIANTE = d.ID_VARIANTE
+                    JOIN BT_USUARIOS_TG u ON u.ID_USUARIO_TG = p.ID_USUARIO_TG
+                    WHERE p.ESTATUS = 'pendiente'
+                    ORDER BY p.ID_PEDIDO
+                """)
+            )
+
+            pedidos = {}
+
+            for r in result:
+                r = r._mapping
+                pid = r["ID_PEDIDO"]
+
+                if pid not in pedidos:
+                    pedidos[pid] = []
+
+                pedidos[pid].append({
+                    "producto": r["producto"],
+                    "variante": r["variante"],
+                    "cantidad": r["CANTIDAD"],
+                    "usuario": {
+                        "username": r["USERNAME"],
+                        "nombre": r["nombre_usuario"],
+                        "apellido": r["apellido_usuario"]
+                    }
+                })
+
+            return jsonify(pedidos)
+
+        except Exception as e:
+            print("🔥 BOT pedidos pendientes:", e)
+            return jsonify({"error": str(e)}), 500
+
+        finally:
+            db.close()
+
 
     @app.post("/api/bot/usuario")
     def bot_registrar_usuario():
@@ -73,21 +130,30 @@ def create_app():
 
         try:
             db.execute(
-                text("""
-                    IF NOT EXISTS (
-                        SELECT 1 FROM BT_USUARIOS_TG WHERE ID_USUARIO_TG = :id
-                    )
-                    INSERT INTO BT_USUARIOS_TG
-                    (ID_USUARIO_TG, USERNAME, NOMBRE, APELLIDO)
-                    VALUES (:id, :username, :nombre, :apellido)
-                """),
-                {
-                    "id": data.get("id_usuario_tg"),
-                    "username": data.get("username"),
-                    "nombre": data.get("nombre"),
-                    "apellido": data.get("apellido")
-                }
-            )
+    text("""
+        UPDATE BT_USUARIOS_TG
+        SET
+            USERNAME = :username,
+            NOMBRE   = :nombre,
+            APELLIDO = :apellido
+        WHERE ID_USUARIO_TG = :id;
+
+        IF @@ROWCOUNT = 0
+        BEGIN
+            INSERT INTO BT_USUARIOS_TG
+                (ID_USUARIO_TG, USERNAME, NOMBRE, APELLIDO)
+            VALUES
+                (:id, :username, :nombre, :apellido);
+        END
+    """),
+    {
+        "id": data.get("id_usuario_tg"),
+        "username": data.get("username"),
+        "nombre": data.get("nombre"),
+        "apellido": data.get("apellido")
+    }
+)
+
 
             db.commit()
             return jsonify({"ok": True})
@@ -113,9 +179,7 @@ def create_app():
                     OUTPUT INSERTED.ID_PEDIDO
                     VALUES (:id_usuario)
                 """),
-                {
-                    "id_usuario": data.get("id_usuario_tg")
-                }
+                {"id_usuario": data.get("id_usuario_tg")}
             )
 
             pedido_id = result.scalar()
@@ -148,8 +212,10 @@ def create_app():
                         v.ID_VARIANTE,
                         :cantidad
                     FROM BT_PRODUCTOS p
-                    JOIN BT_PRODUCTOS_VARIANTES v ON v.ID_PRODUCTO = p.ID_PRODUCTO
-                    WHERE p.NOMBRE = :producto AND v.NOMBRE = :variante
+                    JOIN BT_PRODUCTOS_VARIANTES v
+                        ON v.ID_PRODUCTO = p.ID_PRODUCTO
+                    WHERE p.NOMBRE = :producto
+                      AND v.NOMBRE = :variante
                 """),
                 {
                     "id_pedido": data.get("id_pedido"),
@@ -190,7 +256,10 @@ def create_app():
                 {"id": id_pedido}
             )
 
-            items = [{k.lower(): v for k, v in r._mapping.items()} for r in result]
+            items = [
+                {k.lower(): v for k, v in r._mapping.items()}
+                for r in result
+            ]
 
             return jsonify({
                 "id_pedido": id_pedido,
