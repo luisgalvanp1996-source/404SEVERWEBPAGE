@@ -84,12 +84,33 @@ async def enviar(update, context):
     )
 
 
+
+
+
 async def catalogo(update, context):
-    keyboard = [
-        [
-            InlineKeyboardButton("🍰 Cheesecake", callback_data="producto_cheesecake")
-        ]
-    ]
+    resp = get("/bot/catalogo")
+
+    if not resp or resp.get("ok") is not True:
+        await update.message.reply_text(
+            f"{EMOJI_ERR} Error al cargar el catálogo"
+        )
+        return
+
+    productos = resp.get("data", [])
+
+    if not productos:
+        await update.message.reply_text("📭 Catálogo vacío")
+        return
+
+    keyboard = []
+
+    for p in productos:
+        keyboard.append([
+            InlineKeyboardButton(
+                f"{p['emoji']} {p['nombre']}",
+                callback_data=f"producto:{p['slug']}"
+            )
+        ])
 
     await update.message.reply_text(
         "📋 *Catálogo*\n\nSelecciona un producto:",
