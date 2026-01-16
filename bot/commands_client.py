@@ -5,6 +5,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 async def start(update, context):
     user = update.effective_user
+    
 
     # Registrar usuario (idempotente)
     post("/bot/usuario", {
@@ -15,7 +16,7 @@ async def start(update, context):
     })
 
     await update.message.reply_text(
-        f"{EMOJI_CART} Bienvenido!\nUsa /nuevo para iniciar un pedido"
+        f"{EMOJI_CART} Bienvenido!\nUsa /help para ver ayuda"
     )
 
 
@@ -56,9 +57,10 @@ async def lista(update, context):
         await update.message.reply_text("📭 Pedido vacío")
         return
 
-    msg = "📦 *Tu pedido*\n\n"
+    msg = "📦 *Tu pedido*\n\nUsa /enviar para enviar el pedido\n" f"Usa /catalogo para ver más productos\n\n"
     for i in data["items"]:
-        msg += f"- {i['producto']} ({i['variante']}) x{i['cantidad']}\n" f"Usa /enviar para enviar el pedido\n" f"Usa /catalogo para ver más productos\n\n"
+        msg += f"- {i['producto']} ({i['variante']}) x{i['cantidad']}\n"
+        
 
 
     await update.message.reply_text(msg, parse_mode="Markdown")
@@ -96,11 +98,4 @@ async def catalogo(update, context):
     )
 
 
-async def help_cmd(update, context):
-    await update.message.reply_text(
-        "/nuevo - Nuevo pedido\n"
-        "/catalogo - Ver productos\n"
-        "/lista - Ver pedido\n"
-        "/enviar - Enviar pedido\n"
-        "/help - Ayuda"
-    )
+
