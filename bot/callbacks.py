@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from bot.api import post
+from bot.api import get, post
 from bot.config import EMOJI_OK, EMOJI_ERR
 
 
@@ -18,32 +18,47 @@ async def catalogo_callback(update, context):
         return
 
     # =========================
-    # PRODUCTO: CHEESECAKE
+    # PRODUCTO SELECCIONADO
     # =========================
-    if data == "producto_cheesecake":
-        keyboard = [
-            [
-                InlineKeyboardButton("🍰 Fresa", callback_data="cheesecake_fresa"),
-                InlineKeyboardButton("🍰 Chocolate", callback_data="cheesecake_chocolate")
-            ]
-        ]
+    if data.startswith("producto:"):
+        slug = data.split(":")[1]
+
+        resp = get(f"/bot/catalogo/{slug}")
+
+        if not resp or resp.get("ok") is not True:
+            await query.message.reply_text(
+                f"{EMOJI_ERR} Error al cargar el producto"
+            )
+            return
+
+        producto = resp["data"]
+        variantes = producto.get("variantes", [])
+
+        keyboard = []
+        for v in variantes:
+            keyboard.append([
+                InlineKeyboardButton(
+                    f"{producto['emoji']} {v}",
+                    callback_data=f"variante:{slug}:{v}"
+                )
+            ])
 
         await query.message.reply_text(
-            "🍰 *Cheesecake*\n\nSelecciona una variante:",
+            f"{producto['emoji']} *{producto['nombre']}*\n\nSelecciona una variante:",
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode="Markdown"
         )
         return
 
     # =========================
-    # VARIANTES
+    # VARIANTE SELECCIONADA
     # =========================
-    if data in ("cheesecake_fresa", "cheesecake_chocolate"):
-        variante = "Fresa" if data.endswith("fresa") else "Chocolate"
+    if data.startswith("variante:"):
+        _, slug, variante = data.split(":")
 
         resp = post("/bot/pedido/item", {
             "id_pedido": pedido_id,
-            "producto": "Cheesecake",
+            "producto": slug,
             "variante": variante,
             "cantidad": 1
         })
@@ -55,8 +70,8 @@ async def catalogo_callback(update, context):
             return
 
         await query.message.reply_text(
-            f"{EMOJI_OK} Cheesecake ({variante}) agregado al pedido\n"
-            f"Usa /catalogo para ver más productos\n"
-            f"Usa /lista para ver tu pedido\n"
-            f"O usa /enviar para enviar el pedido"
+            f"{EMOJI_OK} {slug.capitalize()} ({variante}) agregado al pedido\n\n"
+            f"📋 /catalogo — Ver más productos\n"
+            f"🧾 /lista — Ver pedido\n"
+            f"📤 /enviar — Enviar pedido"
         )
