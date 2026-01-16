@@ -51,7 +51,6 @@ def create_app():
 
     load_dotenv()  # ✅ necesario
     app.secret_key = os.getenv("SECRET_KEY")
-
     DATA_FOLDER = os.path.join(os.getcwd(), "Data")
 
     @app.route('/Data/<path:filename>')
