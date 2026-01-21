@@ -34,3 +34,28 @@ MongoDB
           └── secciones[]
                └── parrafos[]
                     └── frases[]
+
+//ejemplo de consulta en MongoDB
+
+use ('404webpagedb')
+
+db.getCollection('viajes').aggregate([
+  { $unwind: "$secciones" },
+  { $unwind: "$secciones.parrafos" },
+  { $unwind: "$secciones.parrafos.frases" },
+  {
+    $project: {
+      _id: 0,
+      frase: "$secciones.parrafos.frases"
+    }
+  }
+])
+// Resultado esperado:
+// [
+//   { frase: "Frase 1 del primer párrafo de la primera sección." },
+//   { frase: "Frase 2 del primer párrafo de la primera sección." },
+//   { frase: "Frase 1 del segundo párrafo de la primera sección." },
+//   { frase: "Frase 2 del segundo párrafo de la primera sección." },
+//   { frase: "Frase 1 del primer párrafo de la segunda sección." },
+//   { frase: "Frase 2 del primer párrafo de la segunda sección." }
+// ]
