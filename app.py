@@ -13,7 +13,9 @@ from modules.biblia.routes import bp as biblia_bp
 from modules.medico.routes import bp as medico_bp
 from modules.finanzas.routes import bp as finanzas_bp
 from modules.personal.routes import bp as personal_bp
-from modules.bot.routes import bp as bot_bp
+
+#importa el blueprint del bot telegram
+from bot.routes import bp as bot_bp
 
 
 
