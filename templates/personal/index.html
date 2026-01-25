@@ -22,38 +22,89 @@
 </header>
 
 <main>
-  <h2>Bienvenido </h2>
+  <h2>Bienvenido</h2>
   <p>En esta sección aparecerán tus experiencias personales</p>
   <p>Este espacio contiene cosas personales.</p>
-   <section id="personal experiencias">
-    <button class= "Button1" id="crear-espacio-btn">Crear nuevo espacio</button>
-   </section>
 
-   <!-- Banda desplegable de ejemplo -->
-   <section class="banda">
-    <button class="banda-header">
-     <span>Viaje 1</span>
-     <span class="icon">+</span>
-    </button>
+  <section id="viajes-module">
 
-  <div class="banda-content">
-    <p>
-      Este es el contenido desplegable.  
-      Aquí puedes poner texto, imágenes, formularios o cualquier HTML.
-    </p>
-  </div>
-</section>
+    <!-- ===== ESTADO A: SELECTOR DE VIAJES ===== -->
+    <div id="viajes-selector">
 
+      <h2>Viajes</h2>
+      <p id="viajes-placeholder">Seleccione un viaje</p>
 
-  
+      <ul id="viajes-lista">
+        <!--
+          <li data-id="1">Viaje a Oaxaca</li>
+          <li data-id="2">Valle de Guadalupe</li>
+        -->
+      </ul>
+
+      <button id="btn-viaje-nuevo">Agregar viaje</button>
+
+    </div>
 
 
+    <!-- ===== ESTADO B: VER VIAJE ===== -->
+    <div id="viaje-activo" class="hidden">
+
+      <!-- Header del viaje -->
+      <div id="viaje-header">
+        <h2 id="viaje-titulo"></h2>
+        <p id="viaje-meta"></p>
+      </div>
+
+      <!-- Acciones -->
+      <div id="viaje-acciones">
+        <button id="btn-volver">Volver</button>
+        <button id="btn-editar">Editar</button>
+        <button id="btn-eliminar">Eliminar</button>
+      </div>
+
+      <!-- Slideshow -->
+      <div id="viaje-slideshow">
+        <!-- imágenes -->
+      </div>
+
+      <!-- Contenido del viaje -->
+      <div id="viaje-contenido">
+        <!-- secciones, párrafos, frases -->
+      </div>
+
+    </div>
 
 
+    <!-- ===== ESTADO C: FORMULARIO (crear / editar) ===== -->
+    <div id="viaje-formulario" class="hidden">
 
+      <h3 id="form-titulo">Nuevo viaje</h3>
 
+      <label>
+        Título
+        <input type="text" id="input-titulo">
+      </label>
 
+      <label>
+        Lugar
+        <input type="text" id="input-lugar">
+      </label>
+
+      <label>
+        Fecha
+        <input type="date" id="input-fecha">
+      </label>
+
+      <div class="acciones">
+        <button id="btn-guardar">Guardar</button>
+        <button id="btn-cancelar">Cancelar</button>
+      </div>
+
+    </div>
+
+  </section>
 </main>
+
 
 <footer>
   Por cuanto todos pecaron y estan destituidos de la gloria de Dios, siendo justificados gratuitamente por su gracia mediante la redencion que es Cristo Jesus. (Romanos 3:23-24).
