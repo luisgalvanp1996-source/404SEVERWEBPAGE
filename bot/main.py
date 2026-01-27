@@ -60,5 +60,5 @@ def run_bot():
     # =========================
     app.add_handler(CallbackQueryHandler(catalogo_callback))
 
-    print("🤖 Bot de pedidos corriendo...")
+    print("🤖 Bot de telegram corriendo...")
     app.run_polling()
