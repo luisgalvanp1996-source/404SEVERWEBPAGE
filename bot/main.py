@@ -6,20 +6,20 @@ from telegram.ext import (
     filters
 )
 
-from bot.config import TOKEN
+from bot.config.config import TOKEN
 # Comandos Admin
-from bot.commands_admin import (
+from bot.commands.commands_admin import (
     cancelar,
     completar,
     pedidos,
     texto_admin
     )
 # Comandos Básicos
-from bot.commands_basic import (
+from bot.commands.commands_basic import (
     help_cmd
 )
 # Comandos cliente
-from bot.commands_client import (
+from bot.commands.commands_client import (
     start,
     nuevo,
     lista,
@@ -28,7 +28,7 @@ from bot.commands_client import (
 )
 
 # Callbacks inline
-from bot.callbacks import catalogo_callback
+from bot.templates.callbacks import catalogo_callback
 
 
 def run_bot():

@@ -15,7 +15,7 @@ from modules.finanzas.routes import bp as finanzas_bp
 from modules.personal.routes import bp as personal_bp
 
 #importa el blueprint del bot telegram
-from bot.routes import bp as bot_bp
+from bot.config.routes import bp as bot_bp
 
 
 

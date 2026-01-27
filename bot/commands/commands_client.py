@@ -1,5 +1,5 @@
-from bot.api import post, get
-from bot.config import EMOJI_CART, EMOJI_OK, EMOJI_ERR
+from bot.database.api import post, get
+from bot.config.config import EMOJI_CART, EMOJI_OK, EMOJI_ERR
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
