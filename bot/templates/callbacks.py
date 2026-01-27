@@ -1,6 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from bot.api import get, post
-from bot.config import EMOJI_OK, EMOJI_ERR
+from bot.database.api import get, post
+from bot.config.config import EMOJI_OK, EMOJI_ERR
 
 
 async def catalogo_callback(update, context):

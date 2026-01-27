@@ -1,6 +1,6 @@
-from bot.api import post, get, refresh
-from bot.state import set_admin_action, get_admin_action, clear_admin_action
-from bot.config import ADMIN_IDS, EMOJI_OK, EMOJI_ERR
+from bot.database.api import post, get, refresh
+from bot.config.state import set_admin_action, get_admin_action, clear_admin_action
+from bot.config.config import ADMIN_IDS, EMOJI_OK, EMOJI_ERR
 
 def es_admin(update):
     return update.effective_user.id in ADMIN_IDS

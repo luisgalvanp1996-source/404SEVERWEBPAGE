@@ -1,5 +1,5 @@
 import requests
-from bot.config import FLASK_API_BASE
+from bot.config.config import FLASK_API_BASE
 
 def post(endpoint, data):
     r = requests.post(f"{FLASK_API_BASE}{endpoint}", json=data, timeout=5)
