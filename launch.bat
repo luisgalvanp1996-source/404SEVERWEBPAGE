@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 
 :: Ruta donde está el BAT
 set "BASE_DIR=%~dp0"
@@ -37,14 +38,21 @@ if %errorlevel%==0 (
 )
 
 echo Obteniendo IP pública... >> "%LOG%"
-for /f "delims=" %%i in ('powershell -Command "(Invoke-WebRequest -Uri 'https://api.ipify.org').Content"') do set PUBLIC_IP=%%i
-echo IP Pública: %PUBLIC_IP% >> "%LOG%"
+
+:: Obtener IP pública con curl (sin PowerShell)
+for /f "delims=" %%i in ('curl -s https://api.ipify.org') do set "PUBLIC_IP=%%i"
+
+if defined PUBLIC_IP (
+    echo IP Pública: %PUBLIC_IP% >> "%LOG%"
+) else (
+    echo ERROR: No se pudo obtener la IP pública. >> "%LOG%"
+)
 
 echo Iniciando servidor Python... >> "%LOG%"
 
-
 "C:\Users\Administrador\AppData\Local\Programs\Python\Python314\python.exe" ^
- "%BASE_DIR%app.py" --host=0.0.0.0 --port=5001 >> "%LOG%" 2>&1
+"%BASE_DIR%app.py" --host=0.0.0.0 --port=5001 >> "%LOG%" 2>&1
 
 echo Servidor finalizado: %date% %time% >> "%LOG%"
 pause
+endlocal
