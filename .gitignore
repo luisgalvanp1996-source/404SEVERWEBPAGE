@@ -1,7 +1,42 @@
+# =========================
+# SECRETS / CONFIG
+# =========================
+.env
+.env.*
+*.key
+*.pem
+
+# =========================
+# PYTHON
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env/
+pip-wheel-metadata/
+
+# =========================
+# PROJECT FOLDERS
+# =========================
 DATA/
 Resources/
-*.pyc
-__pycache__/
+
+# =========================
+# TOOLS / BINARIES
+# =========================
 cloudflared.exe
-/.vscode/
-.env
+
+# =========================
+# IDE / EDITORS
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# WINDOWS
+# =========================
+Thumbs.db
+Desktop.ini
+*.log
