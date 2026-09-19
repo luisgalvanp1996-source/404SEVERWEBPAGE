@@ -77,6 +77,36 @@ def registrar_usuario():
     finally:
         db.close()
 
+@bp.get("/usuario/<int:id_usuario_tg>")
+def obtener_usuario(id_usuario_tg):
+    db = SessionLocal()
+
+    try:
+        usuario = db.query(BtUsuariosTG).filter(
+            BtUsuariosTG.id_usuario_tg == id_usuario_tg,
+            BtUsuariosTG.activo == True
+        ).first()
+
+        if not usuario:
+            return jsonify({
+                "ok": False,
+                "error": "Usuario no encontrado"
+            }), 404
+
+        return jsonify({
+            "ok": True,
+            "data": {
+                "id_usuario_tg": usuario.id_usuario_tg,
+                "id_cliente": usuario.cliente_id,
+                "username": usuario.username,
+                "nombre": usuario.nombre,
+                "apellido": usuario.apellido,
+                "tipo_usuario": usuario.tipo_usuario
+            }
+        })
+
+    finally:
+        db.close()
 
 # =========================================================
 # 🤖 CLIENTES

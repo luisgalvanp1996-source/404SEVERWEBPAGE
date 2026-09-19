@@ -7,18 +7,34 @@ from telegram.ext import (
 )
 
 from bot.config.config import TOKEN
-# Comandos Admin
+
+# =========================================================
+# COMANDOS ADMIN
+# =========================================================
+
 from bot.commands.commands_admin import (
-    cancelar,
-    completar,
-    pedidos,
+    panel_admin,
+    pendientes,
+    nuevo_trabajo,
+    seleccionar_cliente,
+    seleccionar_equipo,
+    seleccionar_tipo,
+    crear_trabajo,
     texto_admin
-    )
-# Comandos Básicos
+)
+
+# =========================================================
+# COMANDOS BÁSICOS
+# =========================================================
+
 from bot.commands.commands_basic import (
     help_cmd
 )
-# Comandos cliente
+
+# =========================================================
+# COMANDOS CLIENTE
+# =========================================================
+
 from bot.commands.commands_client import (
     start,
     nuevo,
@@ -27,38 +43,63 @@ from bot.commands.commands_client import (
     catalogo
 )
 
-# Callbacks inline
+# =========================================================
+# CALLBACKS INLINE
+# =========================================================
+
 from bot.templates.callbacks import catalogo_callback
 
 
 def run_bot():
+
     app = Application.builder().token(TOKEN).build()
 
-    # =========================
-    # COMANDOS
-    # =========================
-    # Comandos Cliente
+    # =====================================================
+    # COMANDOS CLIENTE
+    # =====================================================
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("nuevo", nuevo))
     app.add_handler(CommandHandler("lista", lista))
     app.add_handler(CommandHandler("enviar", enviar))
     app.add_handler(CommandHandler("catalogo", catalogo))
 
-    # Comandos Básicos
+    # =====================================================
+    # COMANDOS BÁSICOS
+    # =====================================================
+
     app.add_handler(CommandHandler("help", help_cmd))
 
-    # Comandos Admin
-    app.add_handler(CommandHandler("pedidos", pedidos))
-    app.add_handler(CommandHandler("cancelar", cancelar))
-    app.add_handler(CommandHandler("completar", completar))
+    # =====================================================
+    # COMANDOS ADMIN
+    # =====================================================
+
+    app.add_handler(CommandHandler("admin", panel_admin))
     app.add_handler(CommandHandler("texto_admin", texto_admin))
 
+    # =====================================================
+    # CALLBACKS INLINE
+    # =====================================================
 
+    app.add_handler(
+        CallbackQueryHandler(catalogo_callback)
+    )
 
-    # =========================
-    # CALLBACKS (INLINE BUTTONS)
-    # =========================
-    app.add_handler(CallbackQueryHandler(catalogo_callback))
+    # =====================================================
+    # MENSAJES DE TEXTO
+    # =====================================================
 
-    print("🤖 Bot de telegram corriendo...")
+    app.add_handler(
+        MessageHandler(
+            filters.TEXT & ~filters.COMMAND,
+            texto_admin
+        )
+    )
+
+    print("🤖 Bot de Telegram corriendo...")
+
     app.run_polling()
+
+
+if __name__ == "__main__":
+    run_bot()

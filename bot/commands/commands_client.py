@@ -1,122 +1,223 @@
 from bot.database.api import post, get
-from bot.config.config import EMOJI_CART, EMOJI_OK, EMOJI_ERR
+from bot.config.config import EMOJI_OK, EMOJI_ERR
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-async def start(update, context):
-    user = update.effective_user
-    
+# =========================================================
+# 👤 USUARIO
+# =========================================================
 
-    # Registrar usuario (idempotente)
-    post("/bot/usuario", {
+def registrar_usuario(update):
+    user = update.effective_user
+
+    return post("/bot/usuario", {
         "id_usuario_tg": user.id,
         "username": user.username,
         "nombre": user.first_name,
         "apellido": user.last_name
     })
 
-    await update.message.reply_text(
-        f"{EMOJI_CART} Bienvenido!\nUsa /help para ver ayuda"
-    )
 
+# =========================================================
+# 🤖 START
+# =========================================================
+
+async def start(update, context):
+    try:
+        data = registrar_usuario(update)
+
+        # IMPORTANTE:
+        # registrar_usuario es síncrona porque api.py utiliza requests.
+        # El resultado se obtiene directamente.
+
+        tipo_usuario = data["data"]["tipo_usuario"]
+
+        if tipo_usuario == "ADMIN":
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        "➕ Nuevo trabajo",
+                        callback_data="admin:nuevo"
+                    )
+                ],
+                [
+                    InlineKeyboardButton(
+                        "📋 Trabajos pendientes",
+                        callback_data="admin:pendientes"
+                    )
+                ]
+            ]
+
+            await update.message.reply_text(
+                "🔧 *Panel de administración*\n\n"
+                "Selecciona una opción:",
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+
+        else:
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        "📋 Mis trabajos",
+                        callback_data="cliente:trabajos"
+                    )
+                ]
+            ]
+
+            await update.message.reply_text(
+                "👋 ¡Hola!\n\n"
+                "Desde aquí puedes consultar el estado de tus trabajos.",
+                reply_markup=InlineKeyboardMarkup(keyboard)
+            )
+
+    except Exception as e:
+        await update.message.reply_text(
+            f"{EMOJI_ERR} No pude conectar con el servidor.\n"
+            f"Intenta nuevamente en unos momentos."
+        )
+
+
+# =========================================================
+# 📋 MIS TRABAJOS
+# =========================================================
+
+async def mis_trabajos(update, context):
+    user = update.effective_user
+
+    try:
+        usuario = get(f"/bot/usuario/{user.id}")
+
+        if not usuario or usuario.get("ok") is not True:
+            await update.message.reply_text(
+                f"{EMOJI_ERR} No se encontró tu usuario."
+            )
+            return
+
+        id_cliente = usuario["data"].get("id_cliente")
+
+        if not id_cliente:
+            await update.message.reply_text(
+                "ℹ️ Todavía no tienes trabajos registrados."
+            )
+            return
+
+        data = get(
+            f"/bot/cliente/{id_cliente}/trabajos"
+        )
+
+        trabajos = data.get("data", [])
+
+        if not trabajos:
+            await update.message.reply_text(
+                "📭 No tienes trabajos registrados."
+            )
+            return
+
+        keyboard = []
+
+        for trabajo in trabajos:
+            keyboard.append([
+                InlineKeyboardButton(
+                    f"{trabajo['folio']} · {trabajo['estatus']}",
+                    callback_data=f"cliente:trabajo:{trabajo['id_trabajo']}"
+                )
+            ])
+
+        await update.message.reply_text(
+            "📋 *Mis trabajos*\n\n"
+            "Selecciona un trabajo:",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+
+    except Exception:
+        await update.message.reply_text(
+            f"{EMOJI_ERR} No pude consultar tus trabajos."
+        )
+
+
+# =========================================================
+# 🔎 DETALLE DE TRABAJO
+# =========================================================
+
+async def detalle_trabajo(update, context, id_trabajo):
+    try:
+        data = get(
+            f"/bot/trabajo/{id_trabajo}"
+        )
+
+        if not data or data.get("ok") is not True:
+            await update.callback_query.message.reply_text(
+                f"{EMOJI_ERR} Trabajo no encontrado."
+            )
+            return
+
+        trabajo = data["data"]
+
+        mensaje = (
+            f"📋 *{trabajo['folio']}*\n\n"
+            f"📌 Estado: *{trabajo['estatus']}*\n"
+            f"🔧 Tipo: {trabajo['tipo_trabajo']}\n\n"
+        )
+
+        if trabajo.get("descripcion"):
+            mensaje += (
+                f"📝 *Descripción*\n"
+                f"{trabajo['descripcion']}\n\n"
+            )
+
+        if trabajo.get("fecha_registro"):
+            mensaje += (
+                f"📅 Registrado: "
+                f"{trabajo['fecha_registro'][:10]}\n"
+            )
+
+        await update.callback_query.message.reply_text(
+            mensaje,
+            parse_mode="Markdown"
+        )
+
+    except Exception:
+        await update.callback_query.message.reply_text(
+            f"{EMOJI_ERR} No pude consultar el trabajo."
+        )
+
+
+# =========================================================
+# 🆕 NUEVO
+# =========================================================
 
 async def nuevo(update, context):
-    user = update.effective_user
-
-    # 🔒 ASEGURAR USUARIO ANTES DEL PEDIDO (FIX FK)
-    post("/bot/usuario", {
-        "id_usuario_tg": user.id,
-        "username": user.username,
-        "nombre": user.first_name,
-        "apellido": user.last_name
-    })
-
-    # Crear pedido
-    data = post("/bot/pedido", {
-        "id_usuario_tg": user.id
-    })
-
-    context.user_data["pedido_id"] = data["id_pedido"]
-
     await update.message.reply_text(
-        f"{EMOJI_OK} Pedido creado\nID: {data['id_pedido']}\n"
-        f"Usa /catalogo para ver productos"
+        "🔧 La creación de trabajos se realizará desde "
+        "el panel de administración."
     )
 
+
+# =========================================================
+# 📋 LISTA
+# =========================================================
 
 async def lista(update, context):
-    pedido_id = context.user_data.get("pedido_id")
-
-    if not pedido_id:
-        await update.message.reply_text(f"{EMOJI_ERR} No tienes pedido activo")
-        return
-
-    data = get(f"/bot/pedido/{pedido_id}")
-
-    if not data["items"]:
-        await update.message.reply_text("📭 Pedido vacío")
-        return
-
-    msg = "📦 *Tu pedido*\n\nUsa /enviar para enviar el pedido\n" f"Usa /catalogo para ver más productos\n\n"
-    for i in data["items"]:
-        msg += f"- {i['producto']} ({i['variante']}) x{i['cantidad']}\n"
-        
+    await mis_trabajos(update, context)
 
 
-    await update.message.reply_text(msg, parse_mode="Markdown")
-
+# =========================================================
+# 📤 ENVIAR
+# =========================================================
 
 async def enviar(update, context):
-    pedido_id = context.user_data.get("pedido_id")
-
-    if not pedido_id:
-        await update.message.reply_text(f"{EMOJI_ERR} No hay pedido")
-        return
-
-    post("/bot/pedido/cerrar", {
-        "id_pedido": pedido_id
-    })
-
-    context.user_data.pop("pedido_id", None)
-
     await update.message.reply_text(
-        f"{EMOJI_OK} Pedido enviado, gracias!"
+        "ℹ️ Esta función ya no está disponible."
     )
 
 
-
-
+# =========================================================
+# 📦 CATÁLOGO
+# =========================================================
 
 async def catalogo(update, context):
-    resp = get("/bot/catalogo")
-
-    if not resp or resp.get("ok") is not True:
-        await update.message.reply_text(
-            f"{EMOJI_ERR} Error al cargar el catálogo"
-        )
-        return
-
-    productos = resp.get("data", [])
-
-    if not productos:
-        await update.message.reply_text("📭 Catálogo vacío")
-        return
-
-    keyboard = []
-
-    for p in productos:
-        keyboard.append([
-            InlineKeyboardButton(
-                f"{p['emoji']} {p['nombre']}",
-                callback_data=f"producto:{p['slug']}"
-            )
-        ])
-
     await update.message.reply_text(
-        "📋 *Catálogo*\n\nSelecciona un producto:",
-        reply_markup=InlineKeyboardMarkup(keyboard),
-        parse_mode="Markdown"
+        "ℹ️ El catálogo ya no está disponible."
     )
-
-
-
