@@ -1,3 +1,6 @@
+//✨ es mejor separar los archivos de funcionalidad por componenete referente en vez de uno global
+//✨ al llamar las clases de css para la accion de cada funcion es mejor crear archivo por componente y asi evitar confusiones, por ejemplo: biblia.js, modal.js,  boton.js, alerta.js, registro.js, etc
+
 // static/js/biblia.js
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -29,12 +32,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = $("nextSlide");
   const metaText = $("meta-text");
   const openOriginal = $("open-original");
-
-  // datos del carrusel (array de objetos {tipo, ubicacion, nombre})
+//✨este se puede reemplazar con un array de objetos que contenga toda la info necesaria para el carrusel, cargado al abrir el modal
+  
+// datos del carrusel (array de objetos {tipo, ubicacion, nombre})
   let currentGallery = [];
   let currentIndex = 0;
 
   // ---------- UI: mostrar/ocultar secciones ----------
+  // estas dos funciones tienen la misma funcionalidad, se podrían unificar en una sola función genérica que reciba el contenedor y el botón como parámetros para evitar repetición de código
+ /*  
+ function toggleSection(container, button) {
+    container.style.display = container.style.display === "none" ? "block" : "none";
+    button.textContent = container.style.display === "none" ? "Mostrar Registro de Aprendizajes" : "Ocultar Registro de Aprendizajes";
+  } 
+  */
+
   toggleRegBtn.addEventListener("click", () => {
     registroCont.style.display = registroCont.style.display === "none" ? "block" : "none";
     toggleRegBtn.textContent = registroCont.style.display === "none" ? "Mostrar Registro de Aprendizajes" : "Ocultar Registro de Aprendizajes";

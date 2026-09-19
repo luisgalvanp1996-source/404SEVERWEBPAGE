@@ -22,6 +22,8 @@ pip-wheel-metadata/
 # =========================
 DATA/
 Resources/
+dist/
+build/
 
 # =========================
 # TOOLS / BINARIES
