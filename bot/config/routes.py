@@ -71,7 +71,7 @@ def catalogo_detalle(id_producto):
             SELECT ID_VARIANTE, NOMBRE
             FROM BT_PRODUCTOS_VARIANTES
             WHERE ID_PRODUCTO = :id
-              AND ACTIVO = 1
+            AND ACTIVO = 1
             ORDER BY NOMBRE
         """), {"id": id_producto})
 
