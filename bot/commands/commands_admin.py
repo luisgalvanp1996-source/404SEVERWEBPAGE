@@ -396,6 +396,149 @@ async def texto_admin(update, context):
     texto = update.message.text.strip()
 
     # =====================================================
+    # NUEVO CLIENTE - NOMBRE
+    # =====================================================
+
+    if action == "nuevo_cliente_nombre":
+
+        update_admin_form(
+            context,
+            "cliente_nombre",
+            texto
+        )
+
+        set_admin_action(
+            context,
+            "nuevo_cliente_telefono"
+        )
+
+        await update.message.reply_text(
+            "📱 *Teléfono*\n\n"
+            "Escribe el teléfono del cliente.\n\n"
+            "Si no deseas registrarlo, escribe:\n"
+            "`ninguno`",
+            parse_mode="Markdown"
+        )
+
+        return
+
+    # =====================================================
+    # NUEVO CLIENTE - TELÉFONO
+    # =====================================================
+
+    if action == "nuevo_cliente_telefono":
+
+        if texto.lower() == "ninguno":
+            texto = None
+
+        update_admin_form(
+            context,
+            "cliente_telefono",
+            texto
+        )
+
+        set_admin_action(
+            context,
+            "nuevo_cliente_correo"
+        )
+
+        await update.message.reply_text(
+            "📧 *Correo electrónico*\n\n"
+            "Escribe el correo del cliente.\n\n"
+            "Si no deseas registrarlo, escribe:\n"
+            "`ninguno`",
+            parse_mode="Markdown"
+        )
+
+        return
+
+    # =====================================================
+    # NUEVO CLIENTE - CORREO
+    # =====================================================
+
+    if action == "nuevo_cliente_correo":
+
+        if texto.lower() == "ninguno":
+            texto = None
+
+        update_admin_form(
+            context,
+            "cliente_correo",
+            texto
+        )
+
+        set_admin_action(
+            context,
+            "nuevo_cliente_observaciones"
+        )
+
+        await update.message.reply_text(
+            "📌 *Observaciones del cliente*\n\n"
+            "Escribe alguna observación importante sobre el cliente.\n\n"
+            "Si no hay ninguna, escribe:\n"
+            "`ninguna`",
+            parse_mode="Markdown"
+        )
+
+        return
+
+    # =====================================================
+    # NUEVO CLIENTE - OBSERVACIONES
+    # =====================================================
+
+    if action == "nuevo_cliente_observaciones":
+
+        if texto.lower() == "ninguna":
+            texto = None
+
+        update_admin_form(
+            context,
+            "cliente_observaciones",
+            texto
+        )
+
+        form = get_admin_form(context)
+
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    "💾 Crear cliente",
+                    callback_data="admin:cliente:crear"
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    "❌ Cancelar",
+                    callback_data="admin:cancelar"
+                )
+            ]
+        ]
+
+        mensaje = (
+            "👤 *Revisar cliente*\n\n"
+            f"Nombre: {form.get('cliente_nombre')}\n"
+            f"📱 Teléfono: "
+            f"{form.get('cliente_telefono') or 'Ninguno'}\n"
+            f"📧 Correo: "
+            f"{form.get('cliente_correo') or 'Ninguno'}\n"
+            f"📌 Observaciones: "
+            f"{form.get('cliente_observaciones') or 'Ninguna'}\n"
+        )
+
+        await update.message.reply_text(
+            mensaje,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+
+        set_admin_action(
+            context,
+            "nuevo_cliente_confirmar"
+        )
+
+        return
+
+    # =====================================================
     # DESCRIPCIÓN
     # =====================================================
 
@@ -511,3 +654,55 @@ async def texto_admin(update, context):
         )
 
         return
+
+# =========================================================
+# 👤 NUEVO CLIENTE
+# =========================================================
+
+async def nuevo_cliente(update, context):
+    if not es_admin(update):
+        await update.callback_query.answer(
+            "⛔ No autorizado"
+        )
+        return
+
+    # No limpiamos el formulario porque este cliente
+    # se está creando desde un nuevo trabajo.
+
+    set_admin_action(
+        context,
+        "nuevo_cliente_nombre"
+    )
+
+    await update.callback_query.message.reply_text(
+        "👤 *Nuevo cliente*\n\n"
+        "Escribe el nombre del cliente:",
+        parse_mode="Markdown"
+    )
+
+# =========================================================
+# 💾 GUARDAR CLIENTE
+# =========================================================
+
+
+async def guardar_cliente(context):
+    form = get_admin_form(context)
+
+    try:
+        resultado = post(
+            "/bot/cliente",
+            {
+                "nombre": form.get("cliente_nombre"),
+                "telefono": form.get("cliente_telefono"),
+                "correo": form.get("cliente_correo"),
+                "observaciones": form.get("cliente_observaciones")
+            }
+        )
+
+        if not resultado or resultado.get("ok") is not True:
+            return None
+
+        return resultado
+
+    except Exception:
+        return None
