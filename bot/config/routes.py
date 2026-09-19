@@ -31,7 +31,7 @@ def listar_variantes(id_producto):
             SELECT ID_VARIANTE, NOMBRE
             FROM BT_PRODUCTOS_VARIANTES
             WHERE ID_PRODUCTO = :id
-              AND ACTIVO = 1
+            AND ACTIVO = 1
             ORDER BY NOMBRE
         """), {"id": id_producto})
         return jsonify([dict(x._mapping) for x in r])
