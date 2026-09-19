@@ -10,7 +10,9 @@ from bot.commands.commands_admin import (
     seleccionar_cliente,
     seleccionar_equipo,
     seleccionar_tipo,
-    crear_trabajo
+    crear_trabajo,
+    nuevo_cliente,
+    guardar_cliente
 )
 
 from bot.commands.commands_client import (
@@ -20,7 +22,8 @@ from bot.commands.commands_client import (
 
 from bot.config.state import (
     clear_admin_form,
-    clear_admin_action
+    clear_admin_action,
+    update_admin_form
 )
 
 
@@ -42,24 +45,90 @@ async def catalogo_callback(update, context):
         await pendientes(update, context)
         return
 
+    # =========================================================
+    # CREAR NUEVO CLIENTE
+    # =========================================================
+
+    if data == "admin:cliente:nuevo":
+
+        await nuevo_cliente(
+            update,
+            context
+        )
+
+        return
+
+    # =========================================================
+    # GUARDAR NUEVO CLIENTE
+    # =========================================================
+
+    if data == "admin:cliente:crear":
+
+        if not es_admin(update):
+            await query.message.reply_text(
+                "⛔ No autorizado"
+            )
+            return
+
+        resultado = await guardar_cliente(context)
+
+        if not resultado or resultado.get("ok") is not True:
+            await query.message.reply_text(
+                f"{EMOJI_ERR} No se pudo crear el cliente."
+            )
+            return
+
+        cliente = resultado["data"]
+
+        id_cliente = cliente["id_cliente"]
+
+        # Guardamos el cliente recién creado
+        # dentro del formulario del trabajo.
+        update_admin_form(
+            context,
+            "id_cliente",
+            id_cliente
+        )
+
+        await query.message.reply_text(
+            f"{EMOJI_OK} *Cliente creado*\n\n"
+            f"👤 {cliente['nombre']}\n"
+            f"🆔 Cliente #{id_cliente}\n\n"
+            f"Ahora selecciona el equipo relacionado "
+            f"con el trabajo."
+            ,
+            parse_mode="Markdown"
+        )
+
+        # Continuamos directamente con la selección
+        # de equipo del nuevo cliente.
+        await seleccionar_cliente(
+            update,
+            context,
+            id_cliente
+        )
+
+        return
+
+    # =========================================================
+    # CLIENTE SELECCIONADO
+    # =========================================================
+
     if data.startswith("admin:cliente:"):
 
         valor = data.split(":", 2)[2]
-
-        if valor == "nuevo":
-            await query.message.reply_text(
-                "👤 *Nuevo cliente*\n\n"
-                "Esta parte la conectaremos después.",
-                parse_mode="Markdown"
-            )
-            return
 
         await seleccionar_cliente(
             update,
             context,
             int(valor)
         )
+
         return
+
+    # =========================================================
+    # EQUIPO SELECCIONADO
+    # =========================================================
 
     if data.startswith("admin:equipo:"):
 
@@ -70,7 +139,12 @@ async def catalogo_callback(update, context):
             context,
             valor
         )
+
         return
+
+    # =========================================================
+    # TIPO DE TRABAJO
+    # =========================================================
 
     if data.startswith("admin:tipo:"):
 
@@ -81,6 +155,7 @@ async def catalogo_callback(update, context):
             context,
             tipo
         )
+
         return
 
     # =========================================================
@@ -195,7 +270,10 @@ async def catalogo_callback(update, context):
 
     if data == "cliente:trabajos":
 
-        await mis_trabajos(update, context)
+        await mis_trabajos(
+            update,
+            context
+        )
 
         return
 
