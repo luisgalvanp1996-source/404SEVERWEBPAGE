@@ -7,75 +7,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 # 👤 USUARIO
 # =========================================================
 
-def registrar_usuario(update):
-    user = update.effective_user
+from bot.config.routes import registrar_usuario
 
-    return post("/bot/usuario", {
-        "id_usuario_tg": user.id,
-        "username": user.username,
-        "nombre": user.first_name,
-        "apellido": user.last_name
-    })
-
-
-# =========================================================
-# 🤖 START
-# =========================================================
-
-async def start(update, context):
-    try:
-        data = registrar_usuario(update)
-
-        # IMPORTANTE:
-        # registrar_usuario es síncrona porque api.py utiliza requests.
-        # El resultado se obtiene directamente.
-
-        tipo_usuario = data["data"]["tipo_usuario"]
-
-        if tipo_usuario == "ADMIN":
-            keyboard = [
-                [
-                    InlineKeyboardButton(
-                        "➕ Nuevo trabajo",
-                        callback_data="admin:nuevo"
-                    )
-                ],
-                [
-                    InlineKeyboardButton(
-                        "📋 Trabajos pendientes",
-                        callback_data="admin:pendientes"
-                    )
-                ]
-            ]
-
-            await update.message.reply_text(
-                "🔧 *Panel de administración*\n\n"
-                "Selecciona una opción:",
-                reply_markup=InlineKeyboardMarkup(keyboard),
-                parse_mode="Markdown"
-            )
-
-        else:
-            keyboard = [
-                [
-                    InlineKeyboardButton(
-                        "📋 Mis trabajos",
-                        callback_data="cliente:trabajos"
-                    )
-                ]
-            ]
-
-            await update.message.reply_text(
-                "👋 ¡Hola!\n\n"
-                "Desde aquí puedes consultar el estado de tus trabajos.",
-                reply_markup=InlineKeyboardMarkup(keyboard)
-            )
-
-    except Exception as e:
-        await update.message.reply_text(
-            f"{EMOJI_ERR} No pude conectar con el servidor.\n"
-            f"Intenta nuevamente en unos momentos."
-        )
 
 
 # =========================================================

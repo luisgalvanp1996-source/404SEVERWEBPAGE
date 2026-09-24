@@ -28,6 +28,7 @@ from bot.commands.commands_admin import (
 # =========================================================
 
 from bot.commands.commands_basic import (
+    start,
     help_cmd
 )
 
@@ -36,7 +37,6 @@ from bot.commands.commands_basic import (
 # =========================================================
 
 from bot.commands.commands_client import (
-    start,
     nuevo,
     lista,
     enviar,
@@ -49,6 +49,7 @@ from bot.commands.commands_client import (
 
 from bot.templates.callbacks import catalogo_callback
 
+#######################################################################################
 
 def run_bot():
 

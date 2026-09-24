@@ -16,7 +16,7 @@ class CatArchivoTipo(Base):
     id = Column("ID", Integer, primary_key=True, autoincrement=True)
     tipo_archivo = Column("TIPO_ARCHIVO", NVARCHAR(100))
 
-  
+
 
 class CatTipos(Base):
     __tablename__ = "CAT_TIPOS"
