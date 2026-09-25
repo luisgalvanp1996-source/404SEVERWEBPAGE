@@ -1,3 +1,5 @@
+#archivo con los comandos de administración del bot 
+
 from bot.database.api import post, get
 from bot.config.config import ADMIN_IDS, EMOJI_OK, EMOJI_ERR
 from bot.config.state import (

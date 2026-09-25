@@ -1,4 +1,7 @@
-#commands_basic.py
+# archivo con los comandos basicos de uso del bot que todos pueden usar 
+# y algunos funcionan de acuerdo 
+# a diferentes permisos de usuario, por ejemplo el comando
+#  /help muestra diferentes opciones dependiendo si el usuario es administrador o no
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
