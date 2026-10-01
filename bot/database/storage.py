@@ -1,6 +1,6 @@
 #storage.py
 
-# Cada usuario tiene su lista
+
 listas_super = {}
 
 def get_lista(user_id):

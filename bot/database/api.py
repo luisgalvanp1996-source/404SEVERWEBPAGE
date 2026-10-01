@@ -15,3 +15,13 @@ def refresh(endpoint, data):
     r = requests.put(f"{FLASK_API_BASE}{endpoint}", json=data, timeout=5)
     r.raise_for_status()
     return r.json()
+
+def delete(endpoint):
+    r = requests.delete(f"{FLASK_API_BASE}{endpoint}", timeout=5)
+    r.raise_for_status()
+    return r.json()
+
+def merge(endpoint, data):
+    r = requests.patch(f"{FLASK_API_BASE}{endpoint}", json=data, timeout=5)
+    r.raise_for_status()
+    return r.json()
